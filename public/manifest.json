@@ -1,0 +1,25 @@
+{
+  "name": "Kaalika — Precision Vedic Observatory",
+  "short_name": "Kaalika",
+  "description": "High-precision Vedic astrological ephemeris, D1-D60 divisional charts, and Celestial Tarot Sanctuary",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#061411",
+  "theme_color": "#061411",
+  "categories": ["lifestyle", "utilities"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

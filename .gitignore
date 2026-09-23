@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+
+# Production & Environment files - NEVER commit secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.production
+*.env
+
+# Operating System
+.DS_Store
+*.pem
+
+# IDEs
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Testing & Caches
+coverage/
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
