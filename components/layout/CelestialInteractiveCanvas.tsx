@@ -19,7 +19,22 @@ interface Stardust {
   vy: number;
   radius: number;
   alpha: number;
+  maxAlpha: number;
   color: string;
+  life: number;
+  maxLife: number;
+}
+
+interface CursorSpark {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  radius: number;
+  alpha: number;
+  color: string;
+  life: number;
+  maxLife: number;
 }
 
 interface ShootingStar {
@@ -39,11 +54,19 @@ const CELESTIAL_COLORS = [
   '#D4AF37', // Imperial gold
   '#009B77', // Celadon emerald
   '#AABDB7', // Celestial celadon
+  '#E08E6D', // Mars copper
 ];
 
 export function CelestialInteractiveCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const mouseRef = useRef<{ x: number; y: number; active: boolean }>({ x: -1000, y: -1000, active: false });
+  const mouseRef = useRef<{ x: number; y: number; prevX: number; prevY: number; active: boolean; moved: boolean }>({
+    x: -1000,
+    y: -1000,
+    prevX: -1000,
+    prevY: -1000,
+    active: false,
+    moved: false,
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -70,11 +93,39 @@ export function CelestialInteractiveCanvas() {
     resize();
     window.addEventListener('resize', resize);
 
-    // Track mouse
+    // Track mouse & generate spark trail
+    const cursorSparks: CursorSpark[] = [];
+
     const onMouseMove = (e: MouseEvent) => {
+      const prevX = mouseRef.current.x;
+      const prevY = mouseRef.current.y;
+      mouseRef.current.prevX = prevX;
+      mouseRef.current.prevY = prevY;
       mouseRef.current.x = e.clientX;
       mouseRef.current.y = e.clientY;
       mouseRef.current.active = true;
+      mouseRef.current.moved = true;
+
+      // Spawn 1-2 interactive cursor stardust particles when cursor travels
+      if (cursorSparks.length < 50 && prevX > -500) {
+        const dx = e.clientX - prevX;
+        const dy = e.clientY - prevY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 3) {
+          const sparkColor = Math.random() > 0.4 ? '#F2D675' : '#D4AF37';
+          cursorSparks.push({
+            x: e.clientX + (Math.random() - 0.5) * 8,
+            y: e.clientY + (Math.random() - 0.5) * 8,
+            vx: (Math.random() - 0.5) * 0.8 - dx * 0.05,
+            vy: (Math.random() - 0.5) * 0.8 - dy * 0.05 - 0.2,
+            radius: Math.random() * 1.6 + 0.6,
+            alpha: 0.85,
+            color: sparkColor,
+            life: 0,
+            maxLife: Math.random() * 25 + 20,
+          });
+        }
+      }
     };
 
     const onMouseLeave = () => {
@@ -84,31 +135,36 @@ export function CelestialInteractiveCanvas() {
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseleave', onMouseLeave);
 
-    // Check prefers-reduced-motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Initialize 130 stars
-    const starCount = Math.floor((width * height) / 12000);
-    const stars: Star[] = Array.from({ length: Math.min(starCount, 160) }, () => ({
+    // Initialize stars
+    const starCount = Math.floor((width * height) / 10000);
+    const stars: Star[] = Array.from({ length: Math.min(starCount, 180) }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      radius: Math.random() * 1.2 + 0.4,
+      radius: Math.random() * 1.3 + 0.4,
       baseAlpha: Math.random() * 0.5 + 0.25,
-      twinkleSpeed: Math.random() * 0.03 + 0.008,
+      twinkleSpeed: Math.random() * 0.025 + 0.008,
       twinklePhase: Math.random() * Math.PI * 2,
       color: CELESTIAL_COLORS[Math.floor(Math.random() * CELESTIAL_COLORS.length)],
     }));
 
-    // Initialize 30 stardust particles
-    const dustParticles: Stardust[] = Array.from({ length: 32 }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.18,
-      vy: (Math.random() - 0.5) * 0.15 - 0.05,
-      radius: Math.random() * 1.5 + 0.6,
-      alpha: Math.random() * 0.4 + 0.15,
-      color: Math.random() > 0.4 ? '#D4AF37' : '#71B29F',
-    }));
+    // Initialize 36 stardust particles
+    const dustParticles: Stardust[] = Array.from({ length: 36 }, () => {
+      const maxLife = Math.random() * 200 + 100;
+      return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.16,
+        vy: (Math.random() - 0.5) * 0.14 - 0.06,
+        radius: Math.random() * 1.4 + 0.5,
+        alpha: Math.random() * 0.4 + 0.15,
+        maxAlpha: Math.random() * 0.45 + 0.2,
+        color: Math.random() > 0.4 ? '#D4AF37' : '#71B29F',
+        life: Math.random() * maxLife,
+        maxLife,
+      };
+    });
 
     // Shooting star state
     let shootingStar: ShootingStar = {
@@ -123,21 +179,21 @@ export function CelestialInteractiveCanvas() {
     };
 
     let lastShootingStarTime = Date.now();
-    let nextShootingStarDelay = Math.random() * 6000 + 4000; // 4-10 seconds
+    let nextShootingStarDelay = Math.random() * 5000 + 4000;
 
     const triggerShootingStar = () => {
       shootingStar = {
         x: Math.random() * width * 0.8 + width * 0.1,
-        y: Math.random() * height * 0.4,
-        length: Math.random() * 70 + 60,
-        speed: Math.random() * 8 + 10,
-        angle: (Math.PI / 4) + (Math.random() - 0.5) * 0.3, // roughly 45 degrees downward
+        y: Math.random() * height * 0.35,
+        length: Math.random() * 75 + 65,
+        speed: Math.random() * 9 + 11,
+        angle: Math.PI / 4 + (Math.random() - 0.5) * 0.28,
         alpha: 1,
         active: true,
         color: Math.random() > 0.3 ? '#F2D675' : '#F5F4EC',
       };
       lastShootingStarTime = Date.now();
-      nextShootingStarDelay = Math.random() * 9000 + 6000;
+      nextShootingStarDelay = Math.random() * 8000 + 5000;
     };
 
     let tick = 0;
@@ -153,22 +209,55 @@ export function CelestialInteractiveCanvas() {
 
       const mouse = mouseRef.current;
 
-      // 1. Draw Twinkling Stars
+      // 1. Dynamic Constellation Filaments near Cursor
+      if (mouse.active && !prefersReducedMotion) {
+        const nearbyStars: Star[] = [];
+        for (let i = 0; i < stars.length; i++) {
+          const s = stars[i];
+          const dx = s.x - mouse.x;
+          const dy = s.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 150) {
+            nearbyStars.push(s);
+          }
+        }
+
+        // Draw soft golden links between nearby stars
+        ctx.strokeStyle = 'rgba(212, 175, 55, 0.14)';
+        ctx.lineWidth = 0.75;
+        for (let i = 0; i < nearbyStars.length; i++) {
+          for (let j = i + 1; j < nearbyStars.length; j++) {
+            const s1 = nearbyStars[i];
+            const s2 = nearbyStars[j];
+            const d = Math.hypot(s1.x - s2.x, s1.y - s2.y);
+            if (d < 110) {
+              const alpha = (1 - d / 110) * 0.22;
+              ctx.strokeStyle = `rgba(242, 214, 117, ${alpha})`;
+              ctx.beginPath();
+              ctx.moveTo(s1.x, s1.y);
+              ctx.lineTo(s2.x, s2.y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      // 2. Draw Twinkling Stars
       for (let i = 0; i < stars.length; i++) {
         const s = stars[i];
-        let currentAlpha = prefersReducedMotion 
-          ? s.baseAlpha 
-          : s.baseAlpha + Math.sin(tick * s.twinkleSpeed + s.twinklePhase) * 0.25;
+        let currentAlpha = prefersReducedMotion
+          ? s.baseAlpha
+          : s.baseAlpha + Math.sin(tick * s.twinkleSpeed + s.twinklePhase) * 0.28;
 
-        currentAlpha = Math.max(0.1, Math.min(0.9, currentAlpha));
+        currentAlpha = Math.max(0.12, Math.min(0.95, currentAlpha));
 
         // Subtle mouse proximity glow
         if (mouse.active) {
           const dx = s.x - mouse.x;
           const dy = s.y - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 140) {
-            currentAlpha = Math.min(1, currentAlpha + (1 - dist / 140) * 0.4);
+          const dist = Math.hypot(dx, dy);
+          if (dist < 150) {
+            currentAlpha = Math.min(1, currentAlpha + (1 - dist / 150) * 0.45);
           }
         }
 
@@ -179,36 +268,74 @@ export function CelestialInteractiveCanvas() {
         ctx.fill();
 
         // Delicate star aura on brighter stars
-        if (s.radius > 1.2 && currentAlpha > 0.6) {
+        if (s.radius > 1.1 && currentAlpha > 0.55) {
           ctx.fillStyle = s.color;
-          ctx.globalAlpha = (currentAlpha - 0.5) * 0.35;
+          ctx.globalAlpha = (currentAlpha - 0.45) * 0.32;
           ctx.beginPath();
-          ctx.arc(s.x, s.y, s.radius * 2.8, 0, Math.PI * 2);
+          ctx.arc(s.x, s.y, s.radius * 3, 0, Math.PI * 2);
           ctx.fill();
         }
       }
 
-      // 2. Draw Drifting Stardust with Soft Trails
+      // 3. Draw Drifting Stardust Particles
       if (!prefersReducedMotion) {
         for (let i = 0; i < dustParticles.length; i++) {
           const p = dustParticles[i];
           p.x += p.vx;
           p.y += p.vy;
+          p.life += 1;
 
           if (p.x < -10) p.x = width + 10;
           if (p.x > width + 10) p.x = -10;
           if (p.y < -10) p.y = height + 10;
           if (p.y > height + 10) p.y = -10;
 
+          const progress = p.life / p.maxLife;
+          const fadeAlpha = Math.sin(progress * Math.PI) * p.maxAlpha;
+
           ctx.fillStyle = p.color;
-          ctx.globalAlpha = p.alpha;
+          ctx.globalAlpha = Math.max(0.05, fadeAlpha);
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (p.life >= p.maxLife) {
+            p.life = 0;
+            p.x = Math.random() * width;
+            p.y = Math.random() * height;
+          }
+        }
+      }
+
+      // 4. Draw Interactive Cursor Stardust Wake
+      if (!prefersReducedMotion) {
+        for (let i = cursorSparks.length - 1; i >= 0; i--) {
+          const sp = cursorSparks[i];
+          sp.x += sp.vx;
+          sp.y += sp.vy;
+          sp.life += 1;
+          const ratio = 1 - sp.life / sp.maxLife;
+
+          if (ratio <= 0) {
+            cursorSparks.splice(i, 1);
+            continue;
+          }
+
+          ctx.fillStyle = sp.color;
+          ctx.globalAlpha = sp.alpha * ratio;
+          ctx.beginPath();
+          ctx.arc(sp.x, sp.y, sp.radius * (0.6 + ratio * 0.4), 0, Math.PI * 2);
+          ctx.fill();
+
+          // Soft spark glow aura
+          ctx.globalAlpha = sp.alpha * ratio * 0.25;
+          ctx.beginPath();
+          ctx.arc(sp.x, sp.y, sp.radius * 2.8, 0, Math.PI * 2);
           ctx.fill();
         }
       }
 
-      // 3. Shooting Star Graphic
+      // 5. Shooting Star Graphic
       const now = Date.now();
       if (!prefersReducedMotion && !shootingStar.active && now - lastShootingStarTime > nextShootingStarDelay) {
         triggerShootingStar();
@@ -223,11 +350,11 @@ export function CelestialInteractiveCanvas() {
 
         const grad = ctx.createLinearGradient(tailX, tailY, shootingStar.x, shootingStar.y);
         grad.addColorStop(0, 'rgba(212, 175, 55, 0)');
-        grad.addColorStop(0.7, `${shootingStar.color}66`);
+        grad.addColorStop(0.7, `${shootingStar.color}77`);
         grad.addColorStop(1, `${shootingStar.color}FF`);
 
         ctx.strokeStyle = grad;
-        ctx.lineWidth = 1.8;
+        ctx.lineWidth = 1.9;
         ctx.globalAlpha = Math.max(0, shootingStar.alpha);
 
         ctx.beginPath();
@@ -235,16 +362,16 @@ export function CelestialInteractiveCanvas() {
         ctx.lineTo(shootingStar.x, shootingStar.y);
         ctx.stroke();
 
-        // Head glowing particle
+        // Glowing head particle
         ctx.fillStyle = '#FFFFFF';
         ctx.globalAlpha = Math.max(0, shootingStar.alpha);
         ctx.beginPath();
-        ctx.arc(shootingStar.x, shootingStar.y, 1.4, 0, Math.PI * 2);
+        ctx.arc(shootingStar.x, shootingStar.y, 1.8, 0, Math.PI * 2);
         ctx.fill();
 
         shootingStar.x += cos * shootingStar.speed;
         shootingStar.y += sin * shootingStar.speed;
-        shootingStar.alpha -= 0.016;
+        shootingStar.alpha -= 0.015;
 
         if (shootingStar.alpha <= 0 || shootingStar.x > width + 100 || shootingStar.y > height + 100) {
           shootingStar.active = false;
@@ -269,7 +396,8 @@ export function CelestialInteractiveCanvas() {
     <canvas 
       ref={canvasRef} 
       className="absolute inset-0 w-full h-full pointer-events-none z-0"
-      style={{ opacity: 0.85 }}
+      style={{ opacity: 0.9 }}
     />
   );
 }
+

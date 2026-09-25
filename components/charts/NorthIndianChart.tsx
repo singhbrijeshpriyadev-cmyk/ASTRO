@@ -241,6 +241,28 @@ export function NorthIndianChart({
             })}
           </motion.g>
 
+          {/* Secondary Counter-Rotating Degree Astrolabe Ring */}
+          <motion.g
+            animate={{ rotate: -360 }}
+            transition={{ duration: 160, repeat: Infinity, ease: 'linear' }}
+            style={{ transformOrigin: '200px 200px' }}
+            opacity={0.12}
+          >
+            <circle cx="200" cy="200" r="135" fill="none" stroke="#D4AF37" strokeWidth="0.5" strokeDasharray="2 6" />
+            {Array.from({ length: 24 }).map((_, i) => {
+              const a = (i * 15 * Math.PI) / 180;
+              return (
+                <circle
+                  key={`degree-tick-${i}`}
+                  cx={200 + Math.cos(a) * 135}
+                  cy={200 + Math.sin(a) * 135}
+                  r="0.8"
+                  fill="#F2D675"
+                />
+              );
+            })}
+          </motion.g>
+
           {/* Interactive House Polygons (Click & Hover detection) */}
           {Array.from({ length: 12 }, (_, i) => i + 1).map(h => {
             const isHovered = hoveredHouse === h;
@@ -264,8 +286,9 @@ export function NorthIndianChart({
                 points={HOUSE_POLYGONS[h]}
                 fill={fillColor}
                 stroke={isHovered ? '#F2D675' : 'rgba(212,175,55,0.18)'}
-                strokeWidth={isHovered ? 1.4 : 0.5}
-                className="transition-all duration-200 cursor-pointer pointer-events-auto"
+                strokeWidth={isHovered ? 1.6 : 0.5}
+                filter={isHovered ? 'url(#chartGoldGlow)' : undefined}
+                className="transition-all duration-300 cursor-pointer pointer-events-auto"
                 onMouseEnter={() => setHoveredHouse(h)}
                 onMouseLeave={() => setHoveredHouse(null)}
               />
@@ -291,9 +314,28 @@ export function NorthIndianChart({
             className="pointer-events-none"
           />
 
-          {/* Central Kendra Crosshair Core & Pulsing Bindu */}
+          {/* Central Kendra Crosshair Core & Pulsing Bindu with Sacred Ripples */}
           <circle cx="200" cy="200" r="16" fill="url(#centerCrossGlow)" className="pointer-events-none" />
-          <circle cx="200" cy="200" r="2.2" fill="#F2D675" filter="url(#chartGoldGlow)" className="pointer-events-none" />
+          
+          {/* Animated concentric breathing ripples */}
+          <circle
+            cx="200"
+            cy="200"
+            r="4"
+            fill="none"
+            stroke="#F2D675"
+            className="bindu-ripple-ring pointer-events-none"
+          />
+          <circle
+            cx="200"
+            cy="200"
+            r="4"
+            fill="none"
+            stroke="#D4AF37"
+            className="bindu-ripple-ring-delayed pointer-events-none"
+          />
+
+          <circle cx="200" cy="200" r="2.4" fill="#F2D675" filter="url(#chartGoldGlow)" className="pointer-events-none" />
           <line x1="192" y1="200" x2="208" y2="200" stroke="#D4AF37" strokeWidth="0.9" opacity="0.75" className="pointer-events-none" />
           <line x1="200" y1="192" x2="200" y2="208" stroke="#D4AF37" strokeWidth="0.9" opacity="0.75" className="pointer-events-none" />
 
@@ -307,7 +349,7 @@ export function NorthIndianChart({
             return (
               <g 
                 key={`house-content-${h}`}
-                className="pointer-events-none"
+                className="pointer-events-none transition-all duration-300"
               >
                 {/* Rashi Sign Number Indicator */}
                 <text
@@ -317,9 +359,10 @@ export function NorthIndianChart({
                   dominantBaseline="central"
                   fill={isHovered ? '#F2D675' : '#D4AF37'}
                   opacity={isHovered ? 1 : 0.85}
-                  fontSize="11.5"
+                  fontSize={isHovered ? '12.5' : '11.5'}
                   fontFamily="Cinzel, Georgia, serif"
                   fontWeight="bold"
+                  filter={isHovered ? 'url(#chartGoldGlow)' : undefined}
                 >
                   {rashiNum}
                 </text>
@@ -331,31 +374,53 @@ export function NorthIndianChart({
                   textAnchor="middle"
                   dominantBaseline="central"
                   fill={isHovered ? '#F2D675' : '#009B77'}
-                  opacity={isHovered ? 0.9 : 0.45}
-                  fontSize="8"
+                  opacity={isHovered ? 1 : 0.45}
+                  fontSize={isHovered ? '9' : '8'}
                   fontFamily="JetBrains Mono, monospace"
                   fontWeight="600"
                 >
                   H{h}
                 </text>
 
-                {/* Planets Occupying House with Celestial Orbit Beads */}
-                <g transform={`translate(${geo.cx}, ${geo.cy})`}>
+                {/* Planets Occupying House with Living Celestial Orbit Beads */}
+                <g 
+                  transform={`translate(${geo.cx}, ${geo.cy})`}
+                  style={{
+                    transformOrigin: `${geo.cx}px ${geo.cy}px`,
+                    transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
+                >
                   {planets.map((p, pIdx) => {
                     const total = planets.length;
                     const yOffset = (pIdx - (total - 1) / 2) * 14;
                     const planetColor = GRAHA_LABEL_COLOR[p.name] || '#F5F4EC';
 
                     return (
-                      <g key={p.name} transform={`translate(0, ${yOffset})`}>
-                        {/* Orbit Bead Dot */}
+                      <g 
+                        key={p.name} 
+                        transform={`translate(0, ${yOffset})`}
+                        className="transition-all duration-300"
+                      >
+                        {/* Orbit Bead Dot with living glow */}
                         <circle
                           cx="-18"
                           cy="0"
-                          r="2.2"
+                          r={isHovered ? '2.8' : '2.2'}
                           fill={planetColor}
                           filter="url(#planetNodeGlow)"
+                          className="transition-all duration-200"
                         />
+                        {isHovered && (
+                          <circle
+                            cx="-18"
+                            cy="0"
+                            r="5"
+                            fill="none"
+                            stroke={planetColor}
+                            strokeWidth="0.6"
+                            opacity="0.6"
+                          />
+                        )}
 
                         {/* Planet Label */}
                         <text
@@ -363,7 +428,7 @@ export function NorthIndianChart({
                           y="0"
                           dominantBaseline="central"
                           fontFamily="Inter, system-ui, sans-serif"
-                          fontSize="10"
+                          fontSize={isHovered ? '10.5' : '10'}
                         >
                           <tspan fill={planetColor} fontWeight="bold" letterSpacing="0.02em">
                             {p.shortLabel}
@@ -375,7 +440,7 @@ export function NorthIndianChart({
                             <tspan fill="#F2D675" fontSize="7.5" fontWeight="bold"> c</tspan>
                           )}
                           {showDegrees && (
-                            <tspan fill="#AABDB7" fontSize="8" fontFamily="JetBrains Mono, monospace">
+                            <tspan fill={isHovered ? '#F5F4EC' : '#AABDB7'} fontSize="8" fontFamily="JetBrains Mono, monospace">
                               {' '}{p.dmsFormatted}
                             </tspan>
                           )}

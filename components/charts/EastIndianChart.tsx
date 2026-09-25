@@ -171,6 +171,16 @@ export function EastIndianChart({
             <circle cx="200" cy="200" r="40" fill="none" stroke="#D4AF37" strokeWidth="0.75" />
           </motion.g>
 
+          {/* Secondary Counter-Rotating Astrolabe Ring */}
+          <motion.g
+            animate={{ rotate: -360 }}
+            transition={{ duration: 150, repeat: Infinity, ease: 'linear' }}
+            style={{ transformOrigin: '200px 200px' }}
+            opacity={0.12}
+          >
+            <circle cx="200" cy="200" r="130" fill="none" stroke="#D4AF37" strokeWidth="0.5" strokeDasharray="2 5" />
+          </motion.g>
+
           {/* Interactive Sign Polygons */}
           {Array.from({ length: 12 }, (_, i) => i + 1).map(signNum => {
             const isHovered = hoveredSign === signNum;
@@ -189,8 +199,9 @@ export function EastIndianChart({
                 points={SIGN_POLYGONS[signNum]}
                 fill={fill}
                 stroke={isHovered ? '#F2D675' : isLagna ? '#009B77' : 'rgba(212,175,55,0.20)'}
-                strokeWidth={isHovered ? 1.4 : isLagna ? 1.2 : 0.6}
-                className="transition-all duration-200 cursor-pointer"
+                strokeWidth={isHovered ? 1.6 : isLagna ? 1.2 : 0.6}
+                filter={isHovered ? 'url(#eastGoldGlow)' : undefined}
+                className="transition-all duration-300 cursor-pointer"
                 onMouseEnter={() => setHoveredSign(signNum)}
                 onMouseLeave={() => setHoveredSign(null)}
               />
@@ -206,9 +217,25 @@ export function EastIndianChart({
           <line x1="391" y1="9" x2="9" y2="391" stroke="#D4AF37" strokeWidth="0.85" opacity="0.45" />
           <polygon points="200,9 391,200 200,391 9,200" fill="none" stroke="#D4AF37" strokeWidth="1.2" opacity="0.85" filter="url(#eastGoldGlow)" />
 
-          {/* Center Crosshair Core */}
+          {/* Center Crosshair Core & Concentric Bindu Ripples */}
           <circle cx="200" cy="200" r="16" fill="rgba(212,175,55,0.15)" />
-          <circle cx="200" cy="200" r="2.2" fill="#F2D675" filter="url(#eastGoldGlow)" />
+          <circle
+            cx="200"
+            cy="200"
+            r="4"
+            fill="none"
+            stroke="#F2D675"
+            className="bindu-ripple-ring pointer-events-none"
+          />
+          <circle
+            cx="200"
+            cy="200"
+            r="4"
+            fill="none"
+            stroke="#D4AF37"
+            className="bindu-ripple-ring-delayed pointer-events-none"
+          />
+          <circle cx="200" cy="200" r="2.4" fill="#F2D675" filter="url(#eastGoldGlow)" />
           <line x1="192" y1="200" x2="208" y2="200" stroke="#D4AF37" strokeWidth="0.9" opacity="0.75" />
           <line x1="200" y1="192" x2="200" y2="208" stroke="#D4AF37" strokeWidth="0.9" opacity="0.75" />
 
@@ -220,16 +247,17 @@ export function EastIndianChart({
             const planets = signPlanets[signNum] || [];
 
             return (
-              <g key={`east-sign-${signNum}`} className="pointer-events-none">
+              <g key={`east-sign-${signNum}`} className="pointer-events-none transition-all duration-300">
                 <text
                   x={geo.cx}
                   y={geo.cy - 16}
                   textAnchor="middle"
                   fill={isHovered ? '#F2D675' : isLagna ? '#009B77' : '#D4AF37'}
                   opacity={isHovered ? 1 : 0.85}
-                  fontSize="11"
+                  fontSize={isHovered ? '12' : '11'}
                   fontFamily="Cinzel, Georgia, serif"
                   fontWeight="bold"
+                  filter={isHovered ? 'url(#eastGoldGlow)' : undefined}
                 >
                   {geo.label}
                   {isLagna && (
@@ -237,8 +265,11 @@ export function EastIndianChart({
                   )}
                 </text>
 
-                {/* Planets inside sign with orbit nodes */}
-                <g transform={`translate(${geo.cx}, ${geo.cy + 4})`}>
+                {/* Planets inside sign with living orbit nodes */}
+                <g 
+                  transform={`translate(${geo.cx}, ${geo.cy + 4})`}
+                  className="transition-all duration-300"
+                >
                   {planets.map((p, idx) => {
                     const yOffset = idx * 13;
                     const planetColor = GRAHA_LABEL_COLOR[p.name] || '#F5F4EC';
@@ -248,21 +279,33 @@ export function EastIndianChart({
                         <circle
                           cx="-16"
                           cy="0"
-                          r="2.2"
+                          r={isHovered ? '2.8' : '2.2'}
                           fill={planetColor}
                           filter="url(#eastNodeGlow)"
+                          className="transition-all duration-200"
                         />
+                        {isHovered && (
+                          <circle
+                            cx="-16"
+                            cy="0"
+                            r="5"
+                            fill="none"
+                            stroke={planetColor}
+                            strokeWidth="0.5"
+                            opacity="0.5"
+                          />
+                        )}
                         <text
                           x="-10"
                           y="0"
                           dominantBaseline="central"
                           fontFamily="Inter, system-ui, sans-serif"
-                          fontSize="9.5"
+                          fontSize={isHovered ? '10' : '9.5'}
                         >
                           <tspan fill={planetColor} fontWeight="bold">{p.shortLabel}</tspan>
                           {p.isRetrograde && <tspan fill="#E08E6D" fontSize="7.5" fontWeight="bold"> [R]</tspan>}
                           {showDegrees && (
-                            <tspan fill="#AABDB7" fontSize="7.5" fontFamily="JetBrains Mono, monospace">
+                            <tspan fill={isHovered ? '#F5F4EC' : '#AABDB7'} fontSize="7.5" fontFamily="JetBrains Mono, monospace">
                               {' '}{p.dms}
                             </tspan>
                           )}

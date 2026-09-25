@@ -88,7 +88,7 @@ export function CosmicHero({ kundali, onNavigate }: CosmicHeroProps) {
             transition={{ duration: 0.55, delay: 0.18, ease: motionTokens.ease.elegant }}
             className="font-serif text-3xl sm:text-5xl lg:text-[52px] font-bold text-[#F5F4EC] tracking-tight leading-[1.12]"
           >
-            Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F5F4EC] via-[#F2D675] to-[#D4AF37]">Cosmic Blueprint</span>
+            Your <span className="shimmer-gold-text">Cosmic Blueprint</span>
           </motion.h1>
 
           {/* Subtitle */}
@@ -101,7 +101,7 @@ export function CosmicHero({ kundali, onNavigate }: CosmicHeroProps) {
             A deterministic astronomical representation of the heavens at your precise moment of birth. Computed using VSOP87 planetary theory and official N.C. Lahiri Chitra-Paksha Ayanamsha.
           </motion.p>
 
-          {/* Live Quick Pillars Readout Pills */}
+          {/* Live Quick Pillars Readout Pills with Hover Physics */}
           {kundali && (
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
@@ -110,33 +110,49 @@ export function CosmicHero({ kundali, onNavigate }: CosmicHeroProps) {
               className="flex flex-wrap items-center gap-2 pt-1"
             >
               {asc && (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[rgba(11,33,27,0.65)] border border-[rgba(0,155,119,0.30)] text-xs font-mono">
-                  <Compass className="w-3.5 h-3.5 text-[#009B77]" />
+                <motion.div 
+                  whileHover={{ y: -2, scale: 1.03 }}
+                  transition={{ duration: 0.18 }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[rgba(11,33,27,0.65)] border border-[rgba(0,155,119,0.30)] text-xs font-mono shadow-sm cursor-default"
+                >
+                  <Compass className="w-3.5 h-3.5 text-[#009B77] animate-spin-slow" />
                   <span className="text-[#AABDB7] text-[10px]">LAGNA:</span>
                   <span className="text-[#F5F4EC] font-semibold">{asc.zodiacSign}</span>
                   <span className="text-[#009B77] text-[11px]">{asc.dms}</span>
-                </div>
+                </motion.div>
               )}
               {moon && (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[rgba(11,33,27,0.65)] border border-[rgba(245,244,236,0.25)] text-xs font-mono">
+                <motion.div 
+                  whileHover={{ y: -2, scale: 1.03 }}
+                  transition={{ duration: 0.18 }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[rgba(11,33,27,0.65)] border border-[rgba(245,244,236,0.25)] text-xs font-mono shadow-sm cursor-default"
+                >
                   <Moon className="w-3.5 h-3.5 text-[#F5F4EC]" />
                   <span className="text-[#AABDB7] text-[10px]">CHANDRA:</span>
                   <span className="text-[#F5F4EC] font-semibold">{moon.zodiacSign}</span>
-                </div>
+                </motion.div>
               )}
               {sun && (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[rgba(11,33,27,0.65)] border border-[rgba(242,214,117,0.25)] text-xs font-mono">
+                <motion.div 
+                  whileHover={{ y: -2, scale: 1.03 }}
+                  transition={{ duration: 0.18 }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[rgba(11,33,27,0.65)] border border-[rgba(242,214,117,0.25)] text-xs font-mono shadow-sm cursor-default"
+                >
                   <Sun className="w-3.5 h-3.5 text-[#F2D675]" />
                   <span className="text-[#AABDB7] text-[10px]">SURYA:</span>
                   <span className="text-[#F5F4EC] font-semibold">{sun.zodiacSign}</span>
-                </div>
+                </motion.div>
               )}
               {kundali.panchang?.nakshatra && (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[rgba(11,33,27,0.65)] border border-[rgba(212,175,55,0.30)] text-xs font-mono">
+                <motion.div 
+                  whileHover={{ y: -2, scale: 1.03 }}
+                  transition={{ duration: 0.18 }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[rgba(11,33,27,0.65)] border border-[rgba(212,175,55,0.30)] text-xs font-mono shadow-sm cursor-default"
+                >
                   <Star className="w-3.5 h-3.5 text-[#D4AF37]" />
                   <span className="text-[#AABDB7] text-[10px]">NAKSHATRA:</span>
                   <span className="text-[#F2D675] font-semibold">{kundali.panchang.nakshatra.name} (Pada {kundali.panchang.nakshatra.pada})</span>
-                </div>
+                </motion.div>
               )}
             </motion.div>
           )}

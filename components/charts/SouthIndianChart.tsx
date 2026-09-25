@@ -173,6 +173,24 @@ export function SouthIndianChart({
             <circle cx="200" cy="200" r="22" fill="none" stroke="#D4AF37" strokeWidth="0.8" />
           </motion.g>
 
+          {/* Central Sacred Ripples */}
+          <circle
+            cx="200"
+            cy="200"
+            r="4"
+            fill="none"
+            stroke="#F2D675"
+            className="bindu-ripple-ring pointer-events-none"
+          />
+          <circle
+            cx="200"
+            cy="200"
+            r="4"
+            fill="none"
+            stroke="#D4AF37"
+            className="bindu-ripple-ring-delayed pointer-events-none"
+          />
+
           {/* Central Chamber Typography */}
           <text
             x="200"
@@ -233,7 +251,7 @@ export function SouthIndianChart({
                 key={`south-rashi-${rNum}`}
                 onMouseEnter={() => setHoveredRashi(rNum)}
                 onMouseLeave={() => setHoveredRashi(null)}
-                className="cursor-pointer"
+                className="cursor-pointer transition-all duration-300"
               >
                 <rect
                   x={x}
@@ -242,8 +260,9 @@ export function SouthIndianChart({
                   height={cellSize}
                   fill={cellFill}
                   stroke={isHovered ? '#F2D675' : isLagna ? '#009B77' : 'rgba(212,175,55,0.25)'}
-                  strokeWidth={isHovered ? 1.4 : isLagna ? 1.2 : 0.7}
-                  className="transition-all duration-200"
+                  strokeWidth={isHovered ? 1.6 : isLagna ? 1.2 : 0.7}
+                  filter={isHovered ? 'url(#southGoldGlow)' : undefined}
+                  className="transition-all duration-300"
                 />
 
                 {isLagna && (
@@ -277,14 +296,18 @@ export function SouthIndianChart({
                   textAnchor="end"
                   fill={isHovered ? '#F2D675' : isLagna ? '#009B77' : '#AABDB7'}
                   fontFamily="JetBrains Mono, monospace"
-                  fontSize="8.5"
+                  fontSize={isHovered ? '9.5' : '8.5'}
                   fontWeight="bold"
+                  filter={isHovered ? 'url(#southGoldGlow)' : undefined}
                 >
                   {pos.short}
                 </text>
 
-                {/* Planets inside cell with orbit nodes */}
-                <g transform={`translate(${x + cellSize / 2}, ${y + 26})`}>
+                {/* Planets inside cell with living orbit nodes */}
+                <g 
+                  transform={`translate(${x + cellSize / 2}, ${y + 26})`}
+                  className="transition-all duration-300"
+                >
                   {planets.map((p, idx) => {
                     const yOffset = idx * 13;
                     const planetColor = GRAHA_LABEL_COLOR[p.name] || '#F5F4EC';
@@ -294,21 +317,33 @@ export function SouthIndianChart({
                         <circle
                           cx="-16"
                           cy="0"
-                          r="2"
+                          r={isHovered ? '2.6' : '2'}
                           fill={planetColor}
                           filter="url(#southNodeGlow)"
+                          className="transition-all duration-200"
                         />
+                        {isHovered && (
+                          <circle
+                            cx="-16"
+                            cy="0"
+                            r="4.5"
+                            fill="none"
+                            stroke={planetColor}
+                            strokeWidth="0.5"
+                            opacity="0.5"
+                          />
+                        )}
                         <text
                           x="-10"
                           y="0"
                           dominantBaseline="central"
                           fontFamily="Inter, system-ui, sans-serif"
-                          fontSize="9"
+                          fontSize={isHovered ? '9.5' : '9'}
                         >
                           <tspan fill={planetColor} fontWeight="bold">{p.shortLabel}</tspan>
                           {p.isRetrograde && <tspan fill="#E08E6D" fontSize="7.5" fontWeight="bold"> [R]</tspan>}
                           {showDegrees && (
-                            <tspan fill="#AABDB7" fontSize="7.5" fontFamily="JetBrains Mono, monospace">
+                            <tspan fill={isHovered ? '#F5F4EC' : '#AABDB7'} fontSize="7.5" fontFamily="JetBrains Mono, monospace">
                               {' '}{p.dms}
                             </tspan>
                           )}

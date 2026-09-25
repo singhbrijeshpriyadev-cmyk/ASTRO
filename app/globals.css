@@ -204,6 +204,69 @@ button {
   animation-delay: 3s;
 }
 
+/* Celestial Shimmer, Pulse, and Float Animations */
+@keyframes celestial-gold-shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.shimmer-gold-text {
+  background: linear-gradient(90deg, #F5F4EC 0%, #F2D675 25%, #FFFFFF 50%, #D4AF37 75%, #F5F4EC 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: celestial-gold-shimmer 7s linear infinite;
+}
+
+@keyframes celestial-pulse-aura {
+  0%, 100% {
+    box-shadow: 0 0 14px rgba(212, 175, 55, 0.25), 0 0 30px rgba(0, 155, 119, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(212, 175, 55, 0.45), 0 0 50px rgba(0, 155, 119, 0.25);
+  }
+}
+
+.pulse-aura {
+  animation: celestial-pulse-aura 4s ease-in-out infinite;
+}
+
+@keyframes celestial-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.celestial-float-slow {
+  animation: celestial-float 6s ease-in-out infinite;
+}
+
+@keyframes bindu-ripple {
+  0% {
+    r: 4;
+    opacity: 0.8;
+    stroke-width: 1.5;
+  }
+  100% {
+    r: 32;
+    opacity: 0;
+    stroke-width: 0.4;
+  }
+}
+
+.bindu-ripple-ring {
+  animation: bindu-ripple 3.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+}
+
+.bindu-ripple-ring-delayed {
+  animation: bindu-ripple 3.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+  animation-delay: 1.6s;
+}
+
 /* Accessibility: Respect Reduced Motion (Requirement 52) */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -215,8 +278,14 @@ button {
     scroll-behavior: auto !important;
   }
 
-  .glass-reflection-sweep::after {
-    display: none !important;
+  .glass-reflection-sweep::after,
+  .shimmer-gold-text,
+  .pulse-aura,
+  .celestial-float-slow,
+  .bindu-ripple-ring,
+  .bindu-ripple-ring-delayed {
+    animation: none !important;
   }
 }
+
 

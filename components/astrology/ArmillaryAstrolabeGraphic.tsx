@@ -226,6 +226,36 @@ export function ArmillaryAstrolabeGraphic() {
               <polygon points="0,-4.5 4.5,0 0,4.5 -4.5,0" fill="#009B77" filter="url(#goldGlowAstrolabe)" />
               <circle cx="0" cy="0" r="1.5" fill="#FFFFFF" />
             </g>
+
+            {/* Orbiting Mars / Mangala Node */}
+            <g transform="translate(125, 265)">
+              <circle cx="0" cy="0" r="3.5" fill="#E08E6D" filter="url(#goldGlowAstrolabe)" />
+              <circle cx="0" cy="0" r="1.2" fill="#FFFFFF" opacity="0.8" />
+            </g>
+          </motion.g>
+
+          {/* 4.5 TILTED JUPITER / GURU ORBITAL GIMBAL */}
+          <motion.g
+            animate={{ rotate: -360 }}
+            transition={{ duration: 44, repeat: Infinity, ease: 'linear' }}
+            style={{ transformOrigin: '160px 160px' }}
+          >
+            <ellipse
+              cx="160"
+              cy="160"
+              rx="100"
+              ry="50"
+              fill="none"
+              stroke="rgba(212, 175, 55, 0.3)"
+              strokeWidth="0.9"
+              strokeDasharray="3 3"
+              transform="rotate(60 160 160)"
+            />
+            {/* Orbiting Jupiter Orb */}
+            <g transform="translate(230, 130)">
+              <circle cx="0" cy="0" r="4.2" fill="#D4AF37" filter="url(#goldGlowAstrolabe)" />
+              <circle cx="0" cy="0" r="1.8" fill="#F2D675" />
+            </g>
           </motion.g>
 
           {/* 5. INNER CALIBRATED ASTROLABE DISK */}
@@ -279,7 +309,25 @@ export function ArmillaryAstrolabeGraphic() {
             fill="#061411" 
             stroke="#D4AF37" 
             strokeWidth="1.8" 
-            filter="url(#goldGlowAstrolabe)"
+            filter="url(#goldGlowAstrolabe)" 
+          />
+
+          {/* Concentric Bindu Breathing Ripples */}
+          <circle
+            cx="160"
+            cy="160"
+            r="4"
+            fill="none"
+            stroke="#F2D675"
+            className="bindu-ripple-ring pointer-events-none"
+          />
+          <circle
+            cx="160"
+            cy="160"
+            r="4"
+            fill="none"
+            stroke="#009B77"
+            className="bindu-ripple-ring-delayed pointer-events-none"
           />
 
           {/* Breathing Core Energy Pulse */}
@@ -325,6 +373,7 @@ export function ArmillaryAstrolabeGraphic() {
         >
           <span className="absolute top-6 left-1/2 w-1.5 h-1.5 rounded-full bg-[#F2D675] shadow-[0_0_8px_#F2D675]" />
           <span className="absolute bottom-10 right-1/4 w-1 h-1 rounded-full bg-[#F5F4EC] shadow-[0_0_6px_#F5F4EC]" />
+          <span className="absolute top-1/3 left-6 w-1 h-1 rounded-full bg-[#009B77] shadow-[0_0_8px_#009B77]" />
         </motion.div>
       </motion.div>
     </div>
