@@ -6,7 +6,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { TarotCard, TarotOrientation } from '@/lib/tarot/types';
 import { getTarotCardImageUrl } from '@/lib/tarot/cards';
 import { motionTokens } from '@/lib/motion/animationTokens';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, RotateCw } from 'lucide-react';
 
 export interface LuxuryTarotCardProps {
   card?: TarotCard | {
@@ -43,7 +43,6 @@ export function LuxuryTarotCard({
   onClick,
   size = 'md',
   enable3DTilt = true,
-  showMetadata = true,
   className = '',
   slotLabel,
   showBackHint = true,
@@ -85,12 +84,12 @@ export function LuxuryTarotCard({
 
   const isReversed = String(orientation).toLowerCase() === 'reversed';
 
-  // Size configurations
+  // Size configurations with exact Rider-Waite 7:12 ratio (350x600 px)
   const sizeStyles = {
-    sm: 'w-[130px] h-[215px]',
-    md: 'w-[190px] sm:w-[210px] h-[310px] sm:h-[345px]',
-    lg: 'w-[220px] sm:w-[245px] h-[360px] sm:h-[400px]',
-    hero: 'w-[250px] sm:w-[280px] h-[410px] sm:h-[460px]',
+    sm: 'w-[130px] aspect-[7/12]',
+    md: 'w-[190px] sm:w-[210px] aspect-[7/12]',
+    lg: 'w-[230px] sm:w-[250px] aspect-[7/12]',
+    hero: 'w-[270px] sm:w-[300px] aspect-[7/12]',
   };
 
   // Image source resolution
@@ -98,7 +97,6 @@ export function LuxuryTarotCard({
     ? (('imageUrl' in card && card.imageUrl) || ('image_path' in card && card.image_path) || getTarotCardImageUrl(card as any))
     : '/tarot/m00.jpg';
 
-  const romanNumeral = card && typeof card.number === 'number' ? toRoman(card.number) : '';
   const isInteractive = Boolean(onFlip || onClick);
 
   return (
@@ -126,11 +124,11 @@ export function LuxuryTarotCard({
           y: isHovered ? -6 : 0,
         }}
         transition={{ duration: 0.25, ease: motionTokens.ease.standard }}
-        className="w-full h-full relative rounded-[20px] shadow-[0_16px_40px_rgba(0,0,0,0.65)] hover:shadow-[0_22px_50px_rgba(212,175,55,0.25),0_0_30px_rgba(0,155,119,0.15)] transition-shadow duration-300"
+        className="w-full h-full relative rounded-[14px] shadow-[0_16px_40px_rgba(0,0,0,0.7)] hover:shadow-[0_22px_50px_rgba(212,175,55,0.3),0_0_35px_rgba(0,155,119,0.2)] transition-shadow duration-300"
       >
         {/* Real Gilded Card Edge Bevel (Gold Leaf Rim) */}
         <div 
-          className="absolute -inset-[1.5px] rounded-[21.5px] bg-gradient-to-br from-[#F5F4EC] via-[#D4AF37] to-[#8A6E1E] opacity-90 pointer-events-none z-0" 
+          className="absolute -inset-[1.5px] rounded-[15.5px] bg-gradient-to-br from-[#F5F4EC] via-[#D4AF37] to-[#8A6E1E] opacity-95 pointer-events-none z-0 shadow-sm" 
           style={{ transform: 'translateZ(-1px)' }}
         />
 
@@ -138,14 +136,14 @@ export function LuxuryTarotCard({
         <motion.div
           animate={{ rotateY: isFlipped ? 180 : 0 }}
           transition={{ duration: 0.75, ease: [0.2, 0.8, 0.2, 1] }}
-          className="w-full h-full relative rounded-[20px] overflow-hidden"
+          className="w-full h-full relative rounded-[14px] overflow-hidden"
           style={{ transformStyle: 'preserve-3d' }}
         >
           {/* ================================================================= */}
           {/* 1. CARD BACK (Traditional Sacred Obsidian & Gold Foil Yantra)      */}
           {/* ================================================================= */}
           <div
-            className="absolute inset-0 w-full h-full rounded-[20px] bg-gradient-to-br from-[#061814] via-[#0B251F] to-[#04120E] border border-[rgba(212,175,55,0.4)] p-2.5 flex flex-col justify-between overflow-hidden"
+            className="absolute inset-0 w-full h-full rounded-[14px] bg-gradient-to-br from-[#061814] via-[#0B251F] to-[#04120E] border-2 border-[rgba(212,175,55,0.7)] p-2.5 flex flex-col justify-between overflow-hidden shadow-2xl"
             style={{
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
@@ -156,24 +154,24 @@ export function LuxuryTarotCard({
             <div className="absolute inset-0 bg-radial from-[rgba(0,155,119,0.18)] via-transparent to-[rgba(212,175,55,0.06)] pointer-events-none" />
 
             {/* Inner Double Hairline Gold Border with Corner Ornaments */}
-            <div className="relative w-full h-full rounded-[14px] border border-[rgba(212,175,55,0.45)] p-2 flex flex-col items-center justify-between">
-              <div className="absolute inset-1 rounded-[10px] border border-[rgba(212,175,55,0.2)] pointer-events-none" />
+            <div className="relative w-full h-full rounded-[10px] border border-[rgba(212,175,55,0.5)] p-2 flex flex-col items-center justify-between">
+              <div className="absolute inset-1 rounded-[7px] border border-[rgba(212,175,55,0.25)] pointer-events-none" />
 
               {/* Corner Star Filigrees */}
-              <span className="absolute top-1 left-1.5 text-[9px] text-[#D4AF37]/70 font-mono">✦</span>
-              <span className="absolute top-1 right-1.5 text-[9px] text-[#D4AF37]/70 font-mono">✦</span>
-              <span className="absolute bottom-1 left-1.5 text-[9px] text-[#D4AF37]/70 font-mono">✦</span>
-              <span className="absolute bottom-1 right-1.5 text-[9px] text-[#D4AF37]/70 font-mono">✦</span>
+              <span className="absolute top-1 left-1.5 text-[9px] text-[#D4AF37]/80 font-mono">✦</span>
+              <span className="absolute top-1 right-1.5 text-[9px] text-[#D4AF37]/80 font-mono">✦</span>
+              <span className="absolute bottom-1 left-1.5 text-[9px] text-[#D4AF37]/80 font-mono">✦</span>
+              <span className="absolute bottom-1 right-1.5 text-[9px] text-[#D4AF37]/80 font-mono">✦</span>
 
               {/* Top Banner */}
-              <div className="text-[8.5px] font-mono tracking-[0.25em] text-[#D4AF37]/80 uppercase pt-1">
-                KAALIKA
+              <div className="text-[8.5px] font-mono tracking-[0.25em] text-[#D4AF37]/90 uppercase pt-1">
+                {slotLabel || 'KAALIKA'}
               </div>
 
               {/* Central Sacred Sri Yantra & Astrolabe Medallion */}
               <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full flex items-center justify-center">
                 {/* Rotating Outer Sacred Sun Ring */}
-                <svg className="absolute inset-0 w-full h-full text-[#D4AF37]/40 animate-spin" style={{ animationDuration: '45s' }} viewBox="0 0 120 120">
+                <svg className="absolute inset-0 w-full h-full text-[#D4AF37]/50 animate-spin" style={{ animationDuration: '45s' }} viewBox="0 0 120 120">
                   <circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" strokeWidth="0.8" strokeDasharray="3 4" />
                   <circle cx="60" cy="60" r="46" fill="none" stroke="#009B77" strokeWidth="0.6" strokeDasharray="2 3" opacity="0.6" />
                   {Array.from({ length: 16 }).map((_, i) => {
@@ -193,7 +191,7 @@ export function LuxuryTarotCard({
                 </svg>
 
                 {/* Inner Double Triangles (Hexagram Sacred Bindu) */}
-                <svg className="absolute inset-4 w-[calc(100%-32px)] h-[calc(100%-32px)] text-[#D4AF37]/60" viewBox="0 0 100 100">
+                <svg className="absolute inset-4 w-[calc(100%-32px)] h-[calc(100%-32px)] text-[#D4AF37]/70" viewBox="0 0 100 100">
                   <polygon points="50,14 82,70 18,70" fill="none" stroke="currentColor" strokeWidth="0.9" />
                   <polygon points="50,86 82,30 18,30" fill="none" stroke="currentColor" strokeWidth="0.9" />
                   <circle cx="50" cy="50" r="16" fill="rgba(6,20,17,0.9)" stroke="#F2D675" strokeWidth="1" />
@@ -213,7 +211,7 @@ export function LuxuryTarotCard({
                     <span>TAP TO REVEAL</span>
                   </div>
                 )}
-                <div className="text-[8.5px] font-mono tracking-[0.25em] text-[#D4AF37]/80 uppercase mt-0.5">
+                <div className="text-[8.5px] font-mono tracking-[0.25em] text-[#D4AF37]/90 uppercase mt-0.5">
                   ASTRA
                 </div>
               </div>
@@ -229,111 +227,56 @@ export function LuxuryTarotCard({
           </div>
 
           {/* ================================================================= */}
-          {/* 2. CARD FRONT (Authentic Artwork with Golden Archway Frame)       */}
+          {/* 2. CARD FRONT (Authentic Real Tarot Card Face - High Fidelity)      */}
           {/* ================================================================= */}
           <div
-            className="absolute inset-0 w-full h-full rounded-[20px] bg-[#051410] border border-[rgba(212,175,55,0.55)] p-2.5 flex flex-col justify-between overflow-hidden shadow-2xl"
+            className="absolute inset-0 w-full h-full rounded-[14px] bg-[#F7F5EE] border-2 border-[rgba(212,175,55,0.85)] p-[3px] flex flex-col overflow-hidden shadow-2xl"
             style={{
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
               transform: 'rotateY(180deg)',
             }}
           >
-            {/* Golden Header Strip */}
-            <div className="flex items-center justify-between px-1 pb-1.5 border-b border-[rgba(212,175,55,0.22)] text-xs font-mono">
-              <span className="text-[10px] text-[#D4AF37] font-serif font-bold tracking-wider">
-                {romanNumeral ? romanNumeral : (card?.suit ? card.suit.toUpperCase() : '✦')}
-              </span>
-              <span className="text-[8px] tracking-widest uppercase text-[#AABDB7]">
-                {slotLabel || (card?.arcana === 'major' ? 'MAJOR ARCANA' : 'MINOR ARCANA')}
-              </span>
-              {isReversed ? (
-                <span className="px-1.5 py-0.2 rounded bg-amber-950/80 border border-amber-400/50 text-amber-300 text-[8px] font-mono uppercase font-bold tracking-wider shadow">
-                  REV
-                </span>
-              ) : (
-                <span className="px-1.5 py-0.2 rounded bg-emerald-950/80 border border-emerald-400/40 text-emerald-300 text-[8px] font-mono uppercase tracking-wider">
-                  UPR
-                </span>
-              )}
-            </div>
+            {/* Inner Parchment & Real Artwork Altar */}
+            <div className="relative w-full h-full rounded-[10px] overflow-hidden bg-[#FAF8F5] border border-[rgba(212,175,55,0.35)] shadow-inner flex items-center justify-center">
+              {/* Authentic Uncropped Rider-Waite Face */}
+              <div className="relative w-full h-full">
+                <Image
+                  src={imageUrl}
+                  alt={card?.name || 'Tarot Card'}
+                  fill
+                  quality={95}
+                  priority={priority}
+                  className={`object-fill transition-transform duration-700 ${
+                    isReversed ? 'rotate-180' : ''
+                  }`}
+                  sizes="(max-width: 640px) 190px, (max-width: 1024px) 250px, 350px"
+                  style={{
+                    filter: 'contrast(1.06) brightness(1.02) saturate(1.06)',
+                    imageRendering: '-webkit-optimize-contrast',
+                  }}
+                />
+              </div>
 
-            {/* Tarot Artwork Archway Cameo Window */}
-            <div className="relative flex-1 w-full my-1 rounded-xl overflow-hidden bg-black/80 border border-[rgba(212,175,55,0.30)] shadow-inner">
-              <Image
-                src={imageUrl}
-                alt={card?.name || 'Tarot Card'}
-                fill
-                priority={priority}
-                className={`object-cover transition-transform duration-700 ${
-                  isReversed ? 'rotate-180' : ''
-                } ${isHovered ? 'scale-105' : 'scale-100'}`}
-                sizes="(max-width: 768px) 220px, 280px"
-              />
-
-              {/* Inner Atmospheric Vignette */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#061411]/90 via-transparent to-black/25 pointer-events-none" />
-
-              {/* Reversed Watermark Tag */}
+              {/* Reversed State Glass Pill Indicator */}
               {isReversed && (
-                <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/85 border border-amber-400/60 text-amber-300 text-[9px] font-mono uppercase tracking-wider shadow-lg">
-                  Reversed
+                <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black/85 backdrop-blur-md border border-amber-400/80 text-amber-300 text-[9px] font-mono font-semibold uppercase tracking-wider shadow-lg flex items-center gap-1 z-20 pointer-events-none">
+                  <RotateCw className="w-2.5 h-2.5 text-amber-300" />
+                  <span>Reversed</span>
                 </div>
               )}
-            </div>
 
-            {/* Ornate Bottom Nameplate Ribbon */}
-            <div className="pt-1.5 border-t border-[rgba(212,175,55,0.22)] text-center">
-              <h4 className="font-serif text-xs sm:text-[13px] font-bold text-[#F5F4EC] tracking-wide leading-tight truncate">
-                {card?.name || 'The Archetype'}
-              </h4>
-              {showMetadata && card && (
-                <div className="text-[9px] font-mono text-[#D4AF37] mt-0.5 truncate">
-                  {card.arcana === 'major'
-                    ? `Key ${card.number}`
-                    : `${'rank' in card ? card.rank : ''} of ${card.suit || ''}`}
-                </div>
-              )}
+              {/* Dynamic Holographic Foil Glint Across Real Card Face */}
+              <motion.div
+                style={{
+                  background: `radial-gradient(circle at ${glintX} ${glintY}, rgba(255, 255, 255, 0.38) 0%, rgba(212, 175, 55, 0.18) 32%, transparent 68%)`,
+                }}
+                className="absolute inset-0 pointer-events-none mix-blend-soft-light"
+              />
             </div>
-
-            {/* Dynamic Holographic Foil Glint on Front Hover */}
-            <motion.div
-              style={{
-                background: `radial-gradient(circle at ${glintX} ${glintY}, rgba(255, 255, 255, 0.25) 0%, rgba(212, 175, 55, 0.15) 30%, transparent 65%)`,
-              }}
-              className="absolute inset-0 pointer-events-none"
-            />
           </div>
         </motion.div>
       </motion.div>
     </div>
   );
-}
-
-function toRoman(num: number): string {
-  if (num === 0) return '0';
-  const romanMap: [number, string][] = [
-    [1000, 'M'],
-    [900, 'CM'],
-    [500, 'D'],
-    [400, 'CD'],
-    [100, 'C'],
-    [90, 'XC'],
-    [50, 'L'],
-    [40, 'XL'],
-    [10, 'X'],
-    [9, 'IX'],
-    [5, 'V'],
-    [4, 'IV'],
-    [1, 'I'],
-  ];
-  let res = '';
-  let n = num;
-  for (const [val, sym] of romanMap) {
-    while (n >= val) {
-      res += sym;
-      n -= val;
-    }
-  }
-  return res;
 }

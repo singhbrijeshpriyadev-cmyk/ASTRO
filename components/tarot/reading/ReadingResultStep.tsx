@@ -238,7 +238,7 @@ export function ReadingResultStep({
               {/* Master 3D Luxury Tarot Card */}
               <div className="w-full flex justify-center py-1">
                 <LuxuryTarotCard
-                  card={card}
+                  card={card.card || card}
                   orientation={card.orientation}
                   isFlipped={true}
                   size="md"

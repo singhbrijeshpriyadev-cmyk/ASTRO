@@ -105,7 +105,7 @@ export function CardRevealStep({ reading, onRevealComplete }: CardRevealStepProp
 
               {/* Master 3D Luxury Tarot Card */}
               <LuxuryTarotCard
-                card={drawnCard}
+                card={drawnCard.card || drawnCard}
                 orientation={drawnCard.orientation}
                 isFlipped={isFlipped}
                 onFlip={() => handleFlipCard(idx)}
