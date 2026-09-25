@@ -17,6 +17,7 @@ import {
   Eye,
   RefreshCw
 } from 'lucide-react';
+import { LuxuryTarotCard } from './LuxuryTarotCard';
 
 export interface ThreeCardDrawEngineProps {
   onReadingComplete?: (result: ThreeCardReadingResult) => void;
@@ -182,83 +183,24 @@ export function ThreeCardDrawEngine({ onReadingComplete }: ThreeCardDrawEnginePr
                   </span>
                 </div>
 
-                {/* 3D Flip Card Container */}
-                <div 
-                  className="w-48 sm:w-56 aspect-[2/3] relative rounded-lg"
-                  style={{ perspective: '1200px' }}
-                >
-                  <div
-                    className={`w-full h-full relative rounded-lg transition-transform duration-700 shadow-2xl ${
-                      isFlipped ? '[transform:rotateY(180deg)]' : ''
-                    }`}
-                    style={{ transformStyle: 'preserve-3d' }}
-                  >
-                    {/* BACK FACE: Celestial Ornamental Card Back */}
-                    <div 
-                      className="absolute inset-0 w-full h-full rounded-lg border-2 border-vedic-gold/40 bg-gradient-to-br from-obsidian-950 via-[#0d1624] to-obsidian-900 p-2.5 flex flex-col justify-between items-center shadow-xl select-none"
-                      style={{ backfaceVisibility: 'hidden' }}
-                    >
-                      <div className="w-full flex justify-between text-[8px] font-mono text-vedic-gold/40">
-                        <span>🂠</span>
-                        <span>KAALIKA</span>
-                        <span>🂠</span>
-                      </div>
-
-                      {/* Sacred Geometric Mandala Medallion */}
-                      <div className="w-24 h-24 rounded-full border border-vedic-gold/30 flex items-center justify-center relative p-1 bg-black/40">
-                        <div className="w-18 h-18 rounded-full border border-vedic-gold/20 flex items-center justify-center rotate-45">
-                          <div className="w-12 h-12 border border-vedic-gold/40 rotate-45 flex items-center justify-center">
-                            <span className="text-lg text-vedic-gold -rotate-45">✦</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="text-[9px] font-mono text-vedic-gold/60 tracking-widest uppercase">
-                        {drawState === 'shuffling' ? 'Shuffling...' : 'Face Down'}
-                      </div>
-                    </div>
-
-                    {/* FRONT FACE: Authentic Tarot Card Artwork */}
-                    {card && (
-                      <div 
-                        className="absolute inset-0 w-full h-full rounded-lg border-2 border-vedic-gold/60 p-1.5 bg-black/90 shadow-2xl overflow-hidden [transform:rotateY(180deg)] flex flex-col justify-between"
-                        style={{ backfaceVisibility: 'hidden' }}
-                      >
-                        <div className="relative w-full h-full rounded overflow-hidden">
-                          <img
-                            src={card.imageUrl}
-                            alt={card.name}
-                            loading="lazy"
-                            className={`w-full h-full object-cover transition-transform duration-500 ${
-                              card.orientation === 'Reversed' ? 'rotate-180' : ''
-                            }`}
-                          />
-
-                          {/* Orientation & Arcana Badges */}
-                          <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/85 border border-vedic-gold/40 text-[9px] font-mono text-vedic-gold">
-                            {card.arcana === 'Major Arcana' ? `ARC ${card.number}` : card.suit}
-                          </div>
-
-                          {card.orientation === 'Reversed' ? (
-                            <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded bg-red-950/90 text-red-200 border border-red-500/50 text-[9px] font-mono font-bold">
-                              REVERSED
-                            </div>
-                          ) : (
-                            <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded bg-emerald-950/90 text-emerald-200 border border-emerald-500/40 text-[9px] font-mono">
-                              UPRIGHT
-                            </div>
-                          )}
-
-                          {/* Card Name Overlay */}
-                          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-2 pt-3 text-center">
-                            <span className="font-serif text-xs font-bold text-vedic-text leading-tight block drop-shadow">
-                              {card.name}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                {/* 3D Master Luxury Card */}
+                <div className="flex justify-center py-1">
+                  <LuxuryTarotCard
+                    card={card ? {
+                      id: card.cardId,
+                      name: card.name,
+                      arcana: card.arcana,
+                      number: card.number,
+                      suit: card.suit,
+                      imageUrl: card.imageUrl,
+                    } : undefined}
+                    orientation={card?.orientation === 'Reversed' ? 'reversed' : 'upright'}
+                    isFlipped={isFlipped}
+                    size="md"
+                    enable3DTilt={true}
+                    slotLabel={name}
+                    showBackHint={drawState !== 'shuffling'}
+                  />
                 </div>
 
                 {/* Card Title & Orientation Indicator */}
@@ -267,7 +209,7 @@ export function ThreeCardDrawEngine({ onReadingComplete }: ThreeCardDrawEnginePr
                     <span className="text-xs font-serif font-bold text-vedic-gold block">
                       {card.name}
                     </span>
-                    <span className={`text-[10px] font-mono ${card.orientation === 'Reversed' ? 'text-red-400' : 'text-emerald-400'}`}>
+                    <span className={`text-[10px] font-mono ${card.orientation === 'Reversed' ? 'text-amber-400' : 'text-emerald-400'}`}>
                       [{card.orientation}]
                     </span>
                   </div>

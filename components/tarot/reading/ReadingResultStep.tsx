@@ -22,6 +22,7 @@ import {
   Clock,
   BookOpen
 } from 'lucide-react';
+import { LuxuryTarotCard } from '../LuxuryTarotCard';
 
 interface ReadingResultStepProps {
   reading: ProductionTarotReading;
@@ -202,8 +203,8 @@ export function ReadingResultStep({
         </div>
       </div>
 
-      {/* 3 Revealed Cards Display */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* 3 Revealed Cards Display with 3D Luxury Quality */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 justify-items-center">
         {reading.cards.map((card, idx) => {
           const isSelected = activeCardTab === idx;
           const isReversed = card.orientation === 'reversed';
@@ -212,58 +213,47 @@ export function ReadingResultStep({
             <div
               key={card.cardId}
               onClick={() => setActiveCardTab(idx)}
-              className={`liquid-glass-card rounded-2xl p-4 border transition-all cursor-pointer ${
+              className={`liquid-glass-card rounded-[26px] p-4 sm:p-5 border transition-all cursor-pointer flex flex-col items-center space-y-3.5 w-full max-w-[280px] ${
                 isSelected
-                  ? 'border-[#D4AF37] shadow-[0_0_30px_rgba(212,175,55,0.2)] bg-[rgba(11,33,27,0.7)]'
-                  : 'border-[rgba(255,255,255,0.10)] hover:border-[rgba(212,175,55,0.30)] bg-[rgba(4,20,17,0.5)]'
+                  ? 'border-[#D4AF37] shadow-[0_0_35px_rgba(212,175,55,0.30)] bg-[rgba(11,33,27,0.85)] ring-2 ring-[#D4AF37]/50'
+                  : 'border-[rgba(255,255,255,0.10)] hover:border-[rgba(212,175,55,0.35)] bg-[rgba(4,20,17,0.55)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)]'
               }`}
             >
               {/* Position Header */}
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-mono uppercase tracking-wider text-[#D4AF37] font-semibold">
+              <div className="flex items-center justify-between w-full">
+                <span className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] font-semibold">
                   {card.positionName}
                 </span>
                 <span
-                  className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded border ${
+                  className={`text-[9.5px] font-mono uppercase px-2 py-0.5 rounded-full border ${
                     isReversed
-                      ? 'border-amber-400/40 text-amber-300 bg-amber-950/30'
-                      : 'border-[#009B77]/40 text-[#009B77] bg-[#009B77]/10'
+                      ? 'border-amber-400/50 text-amber-300 bg-amber-950/40 shadow-sm'
+                      : 'border-[#009B77]/50 text-[#009B77] bg-[#009B77]/15 shadow-sm'
                   }`}
                 >
                   {card.orientation}
                 </span>
               </div>
 
-              {/* Card Thumbnail */}
-              <div className="relative w-full h-[280px] rounded-xl overflow-hidden bg-black/70 border border-[rgba(255,255,255,0.08)] mb-3">
-                <Image
-                  src={card.imageUrl}
-                  alt={card.name}
-                  fill
-                  className={`object-cover ${isReversed ? 'rotate-180' : ''}`}
-                  sizes="320px"
+              {/* Master 3D Luxury Tarot Card */}
+              <div className="w-full flex justify-center py-1">
+                <LuxuryTarotCard
+                  card={card}
+                  orientation={card.orientation}
+                  isFlipped={true}
+                  size="md"
+                  enable3DTilt={true}
+                  slotLabel={card.positionName}
+                  showMetadata={true}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-
-                <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-end justify-between">
-                  <div>
-                    <div className="font-serif text-base font-bold text-[#F5F4EC] leading-tight">
-                      {card.name}
-                    </div>
-                    <div className="text-[10px] font-mono text-[#D4AF37] mt-0.5">
-                      {card.arcana === 'major' ? 'Major Arcana' : `${card.rank} of ${card.suit}`}
-                    </div>
-                  </div>
-                  {getElementBadge(card.card.element)}
-                </div>
               </div>
 
               {/* Key Themes chips */}
-              <div className="flex flex-wrap gap-1 mt-2">
+              <div className="flex flex-wrap gap-1 justify-center w-full pt-1">
                 {card.keywords.slice(0, 3).map((kw, i) => (
                   <span
                     key={i}
-                    className="text-[10px] font-sans px-2 py-0.5 rounded bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#AABDB7]"
+                    className="text-[10px] font-sans px-2.5 py-0.5 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.10)] text-[#AABDB7]"
                   >
                     {kw}
                   </span>
@@ -271,7 +261,7 @@ export function ReadingResultStep({
               </div>
 
               {/* Purushartha Alignment Tag */}
-              <div className="pt-2.5 mt-2 border-t border-[rgba(255,255,255,0.06)] flex items-center justify-between">
+              <div className="pt-2.5 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between w-full">
                 <span className="text-[9.5px] font-mono text-[#AABDB7] uppercase">Purushartha</span>
                 {getPurusharthaBadge(card.suit, card.arcana)}
               </div>

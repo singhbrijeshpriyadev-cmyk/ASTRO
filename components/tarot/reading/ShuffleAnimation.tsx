@@ -165,23 +165,29 @@ export function ShuffleAnimation({ onComplete }: ShuffleAnimationProps) {
                   duration: 0.35,
                   ease: motionTokens.ease.standard,
                 }}
-                className="absolute inset-0 rounded-xl border border-[rgba(212,175,55,0.45)] shadow-[0_12px_30px_rgba(0,0,0,0.7)] bg-gradient-to-br from-[#0B211B] via-[#102A23] to-[#061411] flex flex-col items-center justify-between p-3"
+                className="absolute inset-0 rounded-[18px] shadow-[0_16px_35px_rgba(0,0,0,0.75)] bg-gradient-to-br from-[#061814] via-[#0B251F] to-[#04120E] border border-[rgba(212,175,55,0.45)] p-2.5 flex flex-col items-center justify-between"
                 style={{ zIndex: i }}
               >
+                {/* Gilded Edge Rim */}
+                <div className="absolute -inset-[1px] rounded-[19px] bg-gradient-to-br from-[#F5F4EC]/60 via-[#D4AF37]/80 to-[#8A6E1E]/60 pointer-events-none opacity-80" />
+
                 {/* Traditional geometric card back pattern */}
-                <div className="w-full h-full rounded-lg border border-[rgba(212,175,55,0.30)] flex flex-col items-center justify-between p-2 relative overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(0,155,119,0.15)_0%,transparent_80%)]">
-                  <div className="text-[9px] font-mono tracking-widest text-[#D4AF37]/70">काल</div>
-                  <div className="w-10 h-10 rounded-full border border-[rgba(212,175,55,0.4)] bg-[rgba(11,33,27,0.7)] flex items-center justify-center text-[#F2D675] font-serif text-sm shadow-[0_0_10px_rgba(212,175,55,0.2)]">
-                    ✦
+                <div className="relative w-full h-full rounded-[12px] border border-[rgba(212,175,55,0.35)] flex flex-col items-center justify-between p-2 overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(0,155,119,0.2)_0%,transparent_80%)]">
+                  <div className="text-[8.5px] font-mono tracking-[0.2em] text-[#D4AF37]/80 uppercase">KAALIKA</div>
+                  
+                  {/* Central Sacred Yantra */}
+                  <div className="w-12 h-12 rounded-full border border-[rgba(212,175,55,0.5)] bg-[rgba(11,33,27,0.85)] flex items-center justify-center text-[#F2D675] font-serif text-base shadow-[0_0_15px_rgba(212,175,55,0.3)] relative">
+                    <span className="relative z-10 font-bold">काल</span>
                   </div>
-                  <div className="text-[9px] font-mono tracking-widest text-[#D4AF37]/70">ASTRA</div>
+                  
+                  <div className="text-[8.5px] font-mono tracking-[0.2em] text-[#D4AF37]/80 uppercase">ASTRA</div>
 
                   {phase === 3 && (
                     <motion.div 
                       initial={{ x: '-100%' }}
                       animate={{ x: '100%' }}
-                      transition={{ duration: 0.5 }}
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(242,214,117,0.35)] to-transparent pointer-events-none" 
+                      transition={{ duration: 0.6 }}
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(242,214,117,0.45)] to-transparent pointer-events-none" 
                     />
                   )}
                 </div>

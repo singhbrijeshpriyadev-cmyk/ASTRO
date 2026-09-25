@@ -20,6 +20,7 @@ import { ReadingResultStep } from './reading/ReadingResultStep';
 import { ShareReadingModal } from './reading/ShareReadingModal';
 import { ReadingHistoryDrawer } from './reading/ReadingHistoryDrawer';
 import { TarotArchetypeShell } from './TarotArchetypeShell';
+import { LuxuryTarotCard } from './LuxuryTarotCard';
 import { 
   Sparkles, 
   Layers, 
@@ -386,29 +387,23 @@ export function TarotSanctuaryView({
             {selectedCompendiumCard && (
               <div className="liquid-glass-panel p-6 rounded-2xl border border-[rgba(212,175,55,0.35)] space-y-5 flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="text-center space-y-2">
-                    <div className="relative w-44 h-64 mx-auto rounded-xl overflow-hidden border-2 border-[rgba(212,175,55,0.40)] bg-black/80 shadow-2xl">
-                      <Image
-                        src={selectedCompendiumCard.image_path || getTarotCardImageUrl(selectedCompendiumCard)}
-                        alt={selectedCompendiumCard.name}
-                        fill
-                        className={`object-cover transition-transform duration-500 ${
-                          compendiumFlipped ? 'rotate-180' : ''
-                        }`}
-                        sizes="200px"
+                  <div className="text-center space-y-3">
+                    <div className="flex justify-center py-1">
+                      <LuxuryTarotCard
+                        card={selectedCompendiumCard}
+                        orientation={compendiumFlipped ? 'reversed' : 'upright'}
+                        isFlipped={true}
+                        size="lg"
+                        enable3DTilt={true}
+                        onClick={() => setCompendiumFlipped(!compendiumFlipped)}
                       />
-                      {compendiumFlipped && (
-                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/80 border border-amber-400/50 text-amber-300 text-[9px] font-mono uppercase">
-                          Reversed
-                        </div>
-                      )}
                     </div>
 
                     <button
                       onClick={() => setCompendiumFlipped(!compendiumFlipped)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-[rgba(212,175,55,0.25)] bg-[rgba(212,175,55,0.06)] hover:bg-[rgba(212,175,55,0.15)] text-[#D4AF37] text-[11px] font-mono transition-all"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)] hover:bg-[rgba(212,175,55,0.18)] hover:border-[#D4AF37] text-[#D4AF37] text-[11px] font-mono transition-all shadow-sm"
                     >
-                      <RotateCw className="w-3 h-3" />
+                      <RotateCw className="w-3.5 h-3.5" />
                       <span>{compendiumFlipped ? 'Show Upright View' : 'Inspect Reversed Angle'}</span>
                     </button>
 

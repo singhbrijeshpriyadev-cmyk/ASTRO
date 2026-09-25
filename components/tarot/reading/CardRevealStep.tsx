@@ -1,14 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { motion } from 'motion/react';
 import { ProductionTarotReading } from '@/lib/tarot/types';
+import { LuxuryTarotCard } from '@/components/tarot/LuxuryTarotCard';
 import { 
   ArrowRight, 
   RotateCw, 
   CheckCircle2, 
-  Eye 
+  Eye,
+  Sparkles
 } from 'lucide-react';
 import { motionTokens } from '@/lib/motion/animationTokens';
 
@@ -33,13 +34,20 @@ export function CardRevealStep({ reading, onRevealComplete }: CardRevealStepProp
   };
 
   const handleRevealAll = () => {
-    setFlipped([true, true, true]);
+    // Sequential cinematic staggered flip
+    setFlipped(prev => [true, prev[1], prev[2]]);
+    setTimeout(() => {
+      setFlipped(prev => [prev[0], true, prev[2]]);
+    }, 280);
+    setTimeout(() => {
+      setFlipped([true, true, true]);
+    }, 560);
   };
 
   const cardPositions = [
-    { label: 'CARD 1: PAST', subtitle: 'Foundation & Root Impetus' },
-    { label: 'CARD 2: PRESENT', subtitle: 'Current Crucible & Awareness' },
-    { label: 'CARD 3: FUTURE', subtitle: 'Potential Direction & Horizon' },
+    { label: 'CARD 1: PAST', subtitle: 'Root & Karmic Foundation' },
+    { label: 'CARD 2: PRESENT', subtitle: 'Current Crucible & Reality' },
+    { label: 'CARD 3: FUTURE', subtitle: 'Horizon & Unfolding Destiny' },
   ];
 
   return (
@@ -48,47 +56,46 @@ export function CardRevealStep({ reading, onRevealComplete }: CardRevealStepProp
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4, ease: motionTokens.ease.standard }}
-      className="max-w-4xl mx-auto space-y-8 text-center select-none"
+      className="max-w-5xl mx-auto space-y-8 text-center select-none"
     >
       {/* Header Guidance */}
-      <div className="space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[rgba(212,175,55,0.12)] border border-[rgba(212,175,55,0.30)] text-[#D4AF37] text-xs font-mono tracking-widest uppercase">
+      <div className="space-y-2.5">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[rgba(212,175,55,0.14)] border border-[rgba(212,175,55,0.35)] text-[#D4AF37] text-xs font-mono tracking-widest uppercase shadow-[0_0_15px_rgba(212,175,55,0.18)]">
           <Eye className="w-3.5 h-3.5 text-[#F2D675]" />
-          <span>STEP 2: CARD REVEAL</span>
+          <span>STEP 3: UNVEIL YOUR ARCHETYPES</span>
         </div>
-        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#F5F4EC]">
-          {allFlipped ? 'All Cards Revealed' : 'Select Each Card to Reveal'}
+        <h2 className="font-serif text-2xl sm:text-4xl font-bold text-[#F5F4EC]">
+          {allFlipped ? 'All 3 Archetypes Unveiled' : 'Tap Each Card to Initiate 3D Reveal'}
         </h2>
-        <p className="text-xs sm:text-sm text-[#AABDB7] max-w-lg mx-auto font-sans">
+        <p className="text-xs sm:text-sm text-[#AABDB7] max-w-xl mx-auto font-sans leading-relaxed">
           {allFlipped
-            ? 'Your three resonance archetypes have been uncovered. Proceed to examine your detailed interpretations.'
-            : 'Tap each face-down card to initiate its 3D flip. Take a quiet breath to absorb each archetype.'}
+            ? 'Your three cosmic archetypes have been uncovered. Proceed to examine your synthesized oracle interpretation.'
+            : 'Tap each face-down gilded card to reveal its divine archetype. Each card embodies sacred geometry and holographic foil depth.'}
         </p>
       </div>
 
-      {/* 3 Cards Container with subtle 3D perspective */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 justify-items-center py-4" style={{ perspective: '1000px' }}>
+      {/* 3 Luxury Cards Container with 3D Parallax & Realistic Gilded Edges */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 justify-items-center py-2">
         {reading.cards.map((drawnCard, index) => {
           const idx = index as 0 | 1 | 2;
           const isFlipped = flipped[idx];
-          const isReversed = drawnCard.orientation === 'reversed';
           const posMeta = cardPositions[idx];
 
           return (
             <motion.div 
               key={drawnCard.cardId}
-              initial={{ opacity: 0, y: 20, scale: 0.88 }}
+              initial={{ opacity: 0, y: 25, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{
                 delay: index * 0.12,
                 duration: 0.5,
                 ease: motionTokens.ease.standard,
               }}
-              className="flex flex-col items-center space-y-3 w-full max-w-[240px]"
+              className="flex flex-col items-center space-y-3.5 w-full max-w-[260px]"
             >
               {/* Position Header */}
               <div className="text-center">
-                <span className="text-xs font-mono uppercase tracking-wider text-[#D4AF37] block font-semibold">
+                <span className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] block font-semibold">
                   {posMeta.label}
                 </span>
                 <span className="text-[11px] text-[#AABDB7] font-sans block">
@@ -96,119 +103,40 @@ export function CardRevealStep({ reading, onRevealComplete }: CardRevealStepProp
                 </span>
               </div>
 
-              {/* 3D Flip Card Container with Desktop Hover Tilt (Requirement 29: translateY -8px, rotateX 2deg, rotateY -2deg) */}
-              <motion.div
-                onClick={() => handleFlipCard(idx)}
-                whileHover={!isFlipped ? { y: -8, rotateX: 2, rotateY: -2 } : { y: -2 }}
-                transition={{ duration: 0.2 }}
-                className={`w-[210px] sm:w-[220px] h-[350px] sm:h-[370px] relative rounded-2xl cursor-pointer select-none ${
-                  !isFlipped ? 'hover:shadow-[0_0_25px_rgba(212,175,55,0.25)]' : ''
-                }`}
-                style={{
-                  perspective: '1000px',
-                }}
-              >
-                {/* Inner Flip Wrapper with 3D Rotate (Requirement 32: 600-800ms) */}
-                <motion.div
-                  className="w-full h-full relative"
-                  animate={{ rotateY: isFlipped ? 180 : 0 }}
-                  transition={{ duration: 0.7, ease: motionTokens.ease.elegant }}
-                  style={{
-                    transformStyle: 'preserve-3d',
-                  }}
-                >
-                  {/* FRONT FACE (Card Back when dealt) */}
-                  <div
-                    className="absolute inset-0 rounded-2xl border border-[rgba(212,175,55,0.45)] bg-gradient-to-br from-[#0B211B] via-[#102A23] to-[#061411] shadow-[0_15px_35px_rgba(0,0,0,0.6)] flex flex-col items-center justify-between p-3.5"
-                    style={{
-                      backfaceVisibility: 'hidden',
-                      WebkitBackfaceVisibility: 'hidden',
-                    }}
-                  >
-                    <div className="w-full h-full rounded-xl border border-[rgba(212,175,55,0.30)] flex flex-col items-center justify-between p-3 relative overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(0,155,119,0.18)_0%,transparent_80%)]">
-                      <div className="text-[10px] font-mono tracking-widest text-[#D4AF37]/80">
-                        KAALIKA
-                      </div>
-
-                      {/* Sacred Vedic Yantra & Star Geometry */}
-                      <div className="space-y-2 text-center flex flex-col items-center">
-                        <div className="w-20 h-20 rounded-full border border-[rgba(212,175,55,0.45)] bg-[rgba(11,33,27,0.85)] flex items-center justify-center text-[#F2D675] font-serif text-2xl mx-auto shadow-[0_0_20px_rgba(212,175,55,0.25)] relative">
-                          <svg className="absolute inset-0 w-full h-full text-[#D4AF37]/30 animate-spin" style={{ animationDuration: '30s' }} viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" strokeWidth="0.8" strokeDasharray="3 3" />
-                            <polygon points="50,15 79,66 21,66" fill="none" stroke="currentColor" strokeWidth="0.6" />
-                            <polygon points="50,85 79,34 21,34" fill="none" stroke="currentColor" strokeWidth="0.6" />
-                          </svg>
-                          <span className="relative z-10 text-xl font-bold">काल</span>
-                        </div>
-                        <div className="text-[10px] font-mono text-[#F2D675] tracking-widest uppercase animate-pulse">
-                          ✦ Tap to Reveal ✦
-                        </div>
-                      </div>
-
-                      <div className="text-[10px] font-mono tracking-widest text-[#D4AF37]/80">
-                        ASTRA
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* BACK FACE (Actual Tarot Card Image when flipped) */}
-                  <div
-                    className="absolute inset-0 rounded-2xl border border-[rgba(212,175,55,0.55)] bg-[#061411] shadow-[0_15px_35px_rgba(0,0,0,0.7)] overflow-hidden flex flex-col p-2.5"
-                    style={{
-                      backfaceVisibility: 'hidden',
-                      WebkitBackfaceVisibility: 'hidden',
-                      transform: 'rotateY(180deg)',
-                    }}
-                  >
-                    {/* Tarot Artwork Container */}
-                    <div className="relative w-full h-[270px] sm:h-[290px] rounded-xl overflow-hidden bg-black/60 border border-[rgba(255,255,255,0.10)]">
-                      <Image
-                        src={drawnCard.imageUrl}
-                        alt={drawnCard.name}
-                        fill
-                        className={`object-cover transition-transform duration-500 ${
-                          isReversed ? 'rotate-180' : ''
-                        }`}
-                        sizes="240px"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-
-                      {isReversed && (
-                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/85 border border-amber-400/60 text-amber-300 text-[9px] font-mono uppercase tracking-wider shadow">
-                          Reversed
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Card Title & Orientation Footer */}
-                    <div className="mt-2 text-center space-y-0.5">
-                      <div className="text-xs font-serif font-bold text-[#F5F4EC] truncate">
-                        {drawnCard.name}
-                      </div>
-                      <div className="text-[10px] font-mono text-[#F2D675] uppercase tracking-wider flex items-center justify-center gap-1.5">
-                        <span>{drawnCard.orientation}</span>
-                        <span>•</span>
-                        <span>{drawnCard.rank}</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </motion.div>
+              {/* Master 3D Luxury Tarot Card */}
+              <LuxuryTarotCard
+                card={drawnCard}
+                orientation={drawnCard.orientation}
+                isFlipped={isFlipped}
+                onFlip={() => handleFlipCard(idx)}
+                size="md"
+                enable3DTilt={true}
+                slotLabel={posMeta.label}
+                showBackHint={true}
+                priority={index === 0}
+              />
 
               {/* Status pill & astrological alignment under each card */}
-              <div className="text-xs font-mono">
+              <div className="text-xs font-mono min-h-[36px] flex flex-col items-center justify-center">
                 {isFlipped ? (
-                  <div className="flex flex-col items-center gap-0.5">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex flex-col items-center gap-0.5"
+                  >
                     <span className="inline-flex items-center gap-1 text-[#009B77] font-semibold text-[11px]">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#009B77]" />
                       <span>Archetype Unveiled</span>
                     </span>
-                    <span className="text-[10px] text-[#AABDB7] font-mono truncate max-w-[200px]">
+                    <span className="text-[10px] text-[#AABDB7] font-mono truncate max-w-[210px]">
                       {drawnCard.card.element} • {drawnCard.card.astrologicalAssociation}
                     </span>
-                  </div>
+                  </motion.div>
                 ) : (
-                  <span className="text-[#8FA39E] text-[11px] animate-pulse">Waiting for tap...</span>
+                  <span className="text-[#8FA39E] text-[11px] animate-pulse flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-[#F2D675]" />
+                    <span>Tap card to reveal</span>
+                  </span>
                 )}
               </div>
             </motion.div>
@@ -223,10 +151,10 @@ export function CardRevealStep({ reading, onRevealComplete }: CardRevealStepProp
             onClick={handleRevealAll}
             whileHover={{ y: -1, scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
-            className="px-4 py-2 rounded-xl bg-[rgba(255,255,255,0.04)] hover:bg-[rgba(212,175,55,0.12)] border border-[rgba(255,255,255,0.12)] hover:border-[rgba(212,175,55,0.4)] text-[#AABDB7] hover:text-[#F2D675] text-xs font-mono transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-5 py-2.5 rounded-xl bg-[rgba(212,175,55,0.12)] hover:bg-[rgba(212,175,55,0.22)] border border-[rgba(212,175,55,0.35)] text-[#F2D675] text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(212,175,55,0.15)]"
           >
-            <RotateCw className="w-3.5 h-3.5" />
-            <span>Reveal All Cards</span>
+            <RotateCw className="w-3.5 h-3.5 text-[#F2D675]" />
+            <span>✦ Reveal All Cards</span>
           </motion.button>
         )}
 
@@ -248,3 +176,4 @@ export function CardRevealStep({ reading, onRevealComplete }: CardRevealStepProp
     </motion.div>
   );
 }
+

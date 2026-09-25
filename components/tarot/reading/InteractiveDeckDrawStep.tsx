@@ -25,6 +25,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { motionTokens } from '@/lib/motion/animationTokens';
+import { LuxuryTarotCard } from '../LuxuryTarotCard';
 
 interface InteractiveDeckDrawStepProps {
   question: string;
@@ -197,7 +198,7 @@ export function InteractiveDeckDrawStep({
       </div>
 
       {/* 3 Spread Target Slots (Past • Present • Future) */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-3xl mx-auto py-2">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto py-3">
         {[0, 1, 2].map((slotIdx) => {
           const meta = slotMetadata[slotIdx];
           const drawn = drawnResults[slotIdx];
@@ -206,10 +207,10 @@ export function InteractiveDeckDrawStep({
           return (
             <div
               key={slotIdx}
-              className="flex flex-col items-center space-y-2.5"
+              className="flex flex-col items-center space-y-3"
             >
               <div className="text-center">
-                <span className="text-[11px] font-mono uppercase tracking-wider text-[#D4AF37] font-semibold block">
+                <span className="text-[11px] font-mono uppercase tracking-widest text-[#D4AF37] font-semibold block">
                   {meta.title}
                 </span>
                 <span className="text-[10px] text-[#AABDB7] font-sans block">
@@ -219,50 +220,48 @@ export function InteractiveDeckDrawStep({
 
               {/* Target Slot Box */}
               <div
-                className={`w-40 sm:w-44 h-60 sm:h-64 rounded-2xl border-2 transition-all duration-300 relative flex flex-col items-center justify-between p-3 overflow-hidden ${
+                className={`relative w-[190px] sm:w-[210px] h-[310px] sm:h-[345px] rounded-[22px] transition-all duration-300 flex items-center justify-center ${
                   drawn
-                    ? 'border-[#D4AF37] bg-gradient-to-br from-[#0B211B] via-[#102A23] to-[#061411] shadow-[0_0_25px_rgba(212,175,55,0.3)]'
+                    ? ''
                     : isSlotActive
-                    ? 'border-dashed border-[#F2D675] bg-[rgba(212,175,55,0.06)] shadow-[0_0_20px_rgba(212,175,55,0.15)] animate-pulse'
-                    : 'border-dashed border-[rgba(255,255,255,0.12)] bg-[rgba(5,20,16,0.4)]'
+                    ? 'border-2 border-dashed border-[#F2D675] bg-[rgba(212,175,55,0.06)] shadow-[0_0_25px_rgba(212,175,55,0.2)] animate-pulse'
+                    : 'border-2 border-dashed border-[rgba(255,255,255,0.12)] bg-[rgba(5,20,16,0.35)]'
                 }`}
               >
                 {drawn ? (
                   <motion.div
-                    initial={{ scale: 0.7, opacity: 0, y: 30 }}
-                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                    initial={{ scale: 0.6, opacity: 0, y: 40, rotateZ: -6 }}
+                    animate={{ scale: 1, opacity: 1, y: 0, rotateZ: 0 }}
                     transition={motionTokens.spring.medium}
-                    className="w-full h-full rounded-xl border border-[rgba(212,175,55,0.35)] flex flex-col items-center justify-between p-2.5 relative overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(0,155,119,0.2)_0%,transparent_80%)]"
+                    className="w-full h-full flex items-center justify-center relative"
                   >
-                    <span className="text-[8.5px] font-mono tracking-widest text-[#D4AF37]/80 uppercase">
-                      KAALIKA
-                    </span>
+                    <LuxuryTarotCard
+                      card={drawn.card}
+                      orientation={drawn.orientation}
+                      isFlipped={false}
+                      size="md"
+                      enable3DTilt={true}
+                      slotLabel={meta.title}
+                      showBackHint={false}
+                    />
 
-                    <div className="w-14 h-14 rounded-full border border-[rgba(212,175,55,0.5)] bg-[rgba(11,33,27,0.9)] flex items-center justify-center text-[#F2D675] font-serif text-xl shadow-[0_0_15px_rgba(212,175,55,0.25)]">
-                      काल
-                    </div>
-
-                    <div className="flex flex-col items-center gap-0.5">
-                      <span className="text-[9px] font-mono text-[#009B77] font-semibold flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3" />
-                        <span>Card Drawn</span>
-                      </span>
-                      <span className="text-[8px] font-mono text-[#AABDB7]">
-                        Face-Down
-                      </span>
+                    {/* Checkmark Tag */}
+                    <div className="absolute -bottom-3 px-3 py-0.5 rounded-full bg-[rgba(11,33,27,0.95)] border border-[#009B77] text-[10px] font-mono text-[#009B77] font-semibold flex items-center gap-1 shadow-lg z-20">
+                      <CheckCircle2 className="w-3 h-3 text-[#009B77]" />
+                      <span>Drawn</span>
                     </div>
                   </motion.div>
                 ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center text-center p-2 space-y-2">
-                    <div className={`w-10 h-10 rounded-full border flex items-center justify-center text-xs font-mono font-bold ${
+                  <div className="w-full h-full flex flex-col items-center justify-center text-center p-4 space-y-3">
+                    <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center text-sm font-mono font-bold transition-all ${
                       isSlotActive 
-                        ? 'border-[#F2D675] text-[#F2D675] bg-[rgba(212,175,55,0.15)] shadow-[0_0_12px_rgba(212,175,55,0.3)]' 
+                        ? 'border-[#F2D675] text-[#F2D675] bg-[rgba(212,175,55,0.18)] shadow-[0_0_15px_rgba(212,175,55,0.4)] scale-110' 
                         : 'border-[rgba(255,255,255,0.15)] text-[#AABDB7]'
                     }`}>
                       {slotIdx + 1}
                     </div>
-                    <span className={`text-[11px] font-sans ${isSlotActive ? 'text-[#F2D675] font-semibold' : 'text-[#AABDB7]'}`}>
-                      {isSlotActive ? 'Click a card below' : 'Awaiting draw'}
+                    <span className={`text-xs font-sans max-w-[120px] ${isSlotActive ? 'text-[#F2D675] font-semibold' : 'text-[#AABDB7]'}`}>
+                      {isSlotActive ? 'Select a card from the deck below' : 'Awaiting draw'}
                     </span>
                   </div>
                 )}
@@ -273,11 +272,11 @@ export function InteractiveDeckDrawStep({
       </div>
 
       {/* Interactive Deck Ribbon Controls */}
-      <div className="liquid-glass-panel p-5 rounded-2xl border border-[rgba(212,175,55,0.30)] space-y-4 shadow-2xl relative overflow-hidden bg-[rgba(4,18,14,0.75)]">
+      <div className="liquid-glass-panel p-5 sm:p-6 rounded-2xl border border-[rgba(212,175,55,0.30)] space-y-4 shadow-2xl relative overflow-hidden bg-[rgba(4,18,14,0.85)]">
         {/* Ribbon Header with Quick Draw CTA */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pb-3 border-b border-[rgba(255,255,255,0.08)]">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#D4AF37]" />
+            <Sparkles className="w-4 h-4 text-[#F2D675] animate-pulse" />
             <span className="text-xs font-mono uppercase tracking-wider text-[#F5F4EC] font-semibold">
               Shuffled 78-Card Observatory Deck ({78 - selectedIndices.length} Available)
             </span>
@@ -287,7 +286,7 @@ export function InteractiveDeckDrawStep({
             {!isComplete && (
               <button
                 onClick={handleQuickDraw}
-                className="px-3.5 py-1.5 rounded-xl bg-[rgba(212,175,55,0.12)] hover:bg-[rgba(212,175,55,0.22)] border border-[rgba(212,175,55,0.35)] text-[#F2D675] text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+                className="px-3.5 py-1.5 rounded-xl bg-[rgba(212,175,55,0.15)] hover:bg-[rgba(212,175,55,0.25)] border border-[rgba(212,175,55,0.45)] text-[#F2D675] text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_12px_rgba(212,175,55,0.15)]"
               >
                 <Zap className="w-3.5 h-3.5 text-[#F2D675]" />
                 <span>Quick Auto-Draw</span>
@@ -297,7 +296,7 @@ export function InteractiveDeckDrawStep({
             {selectedIndices.length > 0 && !isComplete && (
               <button
                 onClick={handleResetDraw}
-                className="px-3 py-1.5 rounded-xl bg-[rgba(255,255,255,0.04)] hover:bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.10)] text-[#AABDB7] text-xs font-mono transition-all flex items-center gap-1 cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.10)] border border-[rgba(255,255,255,0.12)] text-[#AABDB7] hover:text-[#F5F4EC] text-xs font-mono transition-all flex items-center gap-1 cursor-pointer"
               >
                 <RotateCw className="w-3 h-3" />
                 <span>Reset</span>
@@ -308,14 +307,14 @@ export function InteractiveDeckDrawStep({
             <div className="flex items-center gap-1">
               <button
                 onClick={() => handleScrollRibbon('left')}
-                className="w-7 h-7 rounded-lg bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(212,175,55,0.15)] border border-[rgba(255,255,255,0.10)] text-[#AABDB7] hover:text-[#F2D675] flex items-center justify-center transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-lg bg-[rgba(255,255,255,0.06)] hover:bg-[rgba(212,175,55,0.20)] border border-[rgba(255,255,255,0.12)] text-[#AABDB7] hover:text-[#F2D675] flex items-center justify-center transition-colors cursor-pointer"
                 title="Scroll left"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={() => handleScrollRibbon('right')}
-                className="w-7 h-7 rounded-lg bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(212,175,55,0.15)] border border-[rgba(255,255,255,0.10)] text-[#AABDB7] hover:text-[#F2D675] flex items-center justify-center transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-lg bg-[rgba(255,255,255,0.06)] hover:bg-[rgba(212,175,55,0.20)] border border-[rgba(255,255,255,0.12)] text-[#AABDB7] hover:text-[#F2D675] flex items-center justify-center transition-colors cursor-pointer"
                 title="Scroll right"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -324,10 +323,10 @@ export function InteractiveDeckDrawStep({
           </div>
         </div>
 
-        {/* Scrollable Fanned Deck Ribbon */}
+        {/* Scrollable Fanned Deck Ribbon with Rich Card Quality & Hover Physics */}
         <div
           ref={ribbonRef}
-          className="flex items-center gap-[-20px] overflow-x-auto py-6 px-4 scrollbar-thin scrollbar-thumb-[rgba(212,175,55,0.2)] scrollbar-track-transparent select-none relative"
+          className="flex items-center overflow-x-auto py-8 px-6 scrollbar-thin scrollbar-thumb-[rgba(212,175,55,0.25)] scrollbar-track-transparent select-none relative"
           style={{ scrollBehavior: 'smooth' }}
         >
           {shuffledDeck.map((item, idx) => {
@@ -337,25 +336,39 @@ export function InteractiveDeckDrawStep({
               <motion.div
                 key={item.id}
                 onClick={() => handleSelectCard(idx)}
-                whileHover={!isDrawn && !isComplete ? { y: -16, scale: 1.08, zIndex: 50 } : undefined}
+                whileHover={!isDrawn && !isComplete ? { 
+                  y: -22, 
+                  scale: 1.15, 
+                  zIndex: 60,
+                  boxShadow: '0 20px 35px rgba(0,0,0,0.8), 0 0 25px rgba(212,175,55,0.5)',
+                } : undefined}
                 whileTap={!isDrawn && !isComplete ? { scale: 0.95 } : undefined}
                 className={`relative flex-shrink-0 w-16 sm:w-20 h-28 sm:h-34 rounded-xl border transition-all duration-200 cursor-pointer ${
                   isDrawn
-                    ? 'opacity-20 pointer-events-none border-transparent translate-y-4'
-                    : 'border-[rgba(212,175,55,0.4)] hover:border-[#F2D675] bg-gradient-to-br from-[#0B211B] via-[#102A23] to-[#061411] shadow-[0_8px_20px_rgba(0,0,0,0.6)] hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]'
+                    ? 'opacity-20 pointer-events-none border-transparent translate-y-6'
+                    : 'border-[rgba(212,175,55,0.5)] hover:border-[#F2D675] bg-gradient-to-br from-[#061814] via-[#0B251F] to-[#04120E] shadow-[0_10px_25px_rgba(0,0,0,0.65)]'
                 }`}
                 style={{
                   marginLeft: idx === 0 ? '0' : '-16px',
                   zIndex: idx,
                 }}
               >
+                {/* Gilded Rim Accent */}
+                <div className="absolute -inset-[1px] rounded-[13px] bg-gradient-to-br from-[#F5F4EC]/60 via-[#D4AF37]/80 to-[#8A6E1E]/60 pointer-events-none opacity-80" />
+
                 {/* Traditional geometric card back pattern */}
-                <div className="w-full h-full rounded-lg border border-[rgba(212,175,55,0.25)] flex flex-col items-center justify-between p-1.5 relative overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(0,155,119,0.12)_0%,transparent_80%)]">
-                  <div className="text-[7px] font-mono tracking-widest text-[#D4AF37]/60">काल</div>
-                  <div className="w-5 h-5 rounded-full border border-[rgba(212,175,55,0.35)] flex items-center justify-center text-[#F2D675] text-[8px] font-serif">
+                <div className="relative w-full h-full rounded-lg border border-[rgba(212,175,55,0.4)] flex flex-col items-center justify-between p-1.5 overflow-hidden bg-gradient-to-br from-[#0B211B] via-[#061411] to-[#0B211B]">
+                  <div className="text-[7.5px] font-mono tracking-widest text-[#D4AF37]/80">काल</div>
+                  
+                  {/* Miniature Sacred Yantra Emblem */}
+                  <div className="w-6 h-6 rounded-full border border-[rgba(212,175,55,0.5)] bg-[rgba(11,33,27,0.9)] flex items-center justify-center text-[#F2D675] text-[9px] font-serif shadow-[0_0_8px_rgba(212,175,55,0.3)]">
                     ✦
                   </div>
-                  <div className="text-[7px] font-mono tracking-widest text-[#D4AF37]/60">ASTRA</div>
+                  
+                  <div className="text-[7.5px] font-mono tracking-widest text-[#D4AF37]/80">ASTRA</div>
+
+                  {/* Micro Shimmer Line */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(255,255,255,0.06)] to-transparent opacity-0 hover:opacity-100 transition-opacity pointer-events-none" />
                 </div>
               </motion.div>
             );
@@ -363,7 +376,7 @@ export function InteractiveDeckDrawStep({
         </div>
 
         <div className="text-center text-[11px] font-mono text-[#AABDB7]">
-          Tip: Scroll or drag horizontally through the 78 cards. Tap any 3 cards to complete your draw.
+          Tip: Scroll or drag horizontally across the deck. Click any 3 cards to draw your Past, Present, and Future archetypes.
         </div>
       </div>
 
