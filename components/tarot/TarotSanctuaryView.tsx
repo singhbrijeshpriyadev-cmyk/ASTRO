@@ -363,13 +363,18 @@ export function TarotSanctuaryView({
                         : 'border-[rgba(255,255,255,0.08)] hover:border-[rgba(212,175,55,0.30)]'
                     }`}
                   >
-                    <div className="relative w-full aspect-[2/3] rounded-lg overflow-hidden bg-black/60 border border-[rgba(255,255,255,0.08)]">
+                    <div className="relative w-full aspect-[7/12] rounded-lg overflow-hidden bg-[#FAF8F5] border border-[rgba(212,175,55,0.35)] shadow-sm">
                       <Image
                         src={card.image_path || getTarotCardImageUrl(card)}
                         alt={card.name}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform"
+                        quality={90}
+                        className="object-fill group-hover:scale-105 transition-transform"
                         sizes="140px"
+                        style={{
+                          filter: 'contrast(1.05) brightness(1.02) saturate(1.05)',
+                          imageRendering: '-webkit-optimize-contrast',
+                        }}
                       />
                     </div>
                     <div className="text-[11px] font-serif font-bold text-[#F5F4EC] truncate">

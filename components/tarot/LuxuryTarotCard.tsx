@@ -136,7 +136,7 @@ export function LuxuryTarotCard({
         <motion.div
           animate={{ rotateY: isFlipped ? 180 : 0 }}
           transition={{ duration: 0.75, ease: [0.2, 0.8, 0.2, 1] }}
-          className="w-full h-full relative rounded-[14px] overflow-hidden"
+          className="w-full h-full relative"
           style={{ transformStyle: 'preserve-3d' }}
         >
           {/* ================================================================= */}
@@ -147,7 +147,7 @@ export function LuxuryTarotCard({
             style={{
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
-              transform: 'rotateY(0deg)',
+              transform: 'rotateY(0deg) translateZ(1px)',
             }}
           >
             {/* Ambient Nebula Underglow */}
@@ -234,7 +234,7 @@ export function LuxuryTarotCard({
             style={{
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
-              transform: 'rotateY(180deg)',
+              transform: 'rotateY(180deg) translateZ(1px)',
             }}
           >
             {/* Inner Parchment & Real Artwork Altar */}
