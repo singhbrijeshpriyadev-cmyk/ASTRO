@@ -21,6 +21,7 @@ import { ShareReadingModal } from './reading/ShareReadingModal';
 import { ReadingHistoryDrawer } from './reading/ReadingHistoryDrawer';
 import { TarotArchetypeShell } from './TarotArchetypeShell';
 import { LuxuryTarotCard } from './LuxuryTarotCard';
+import { TarotFeatureHub } from './TarotFeatureHub';
 import { 
   Sparkles, 
   Layers, 
@@ -36,7 +37,8 @@ import {
   RefreshCw,
   Eye,
   CheckCircle2,
-  ChevronRight
+  ChevronRight,
+  Zap
 } from 'lucide-react';
 
 interface TarotSanctuaryViewProps {
@@ -50,7 +52,7 @@ interface TarotSanctuaryViewProps {
   };
 }
 
-type SanctuaryTab = 'reading' | 'compendium' | 'archetypes';
+type SanctuaryTab = 'reading' | 'compendium' | 'archetypes' | 'features';
 type ReadingFlowStep = 'home' | 'question' | 'shuffle' | 'draw' | 'reveal' | 'result';
 
 export function TarotSanctuaryView({ 
@@ -232,6 +234,18 @@ export function TarotSanctuaryView({
           >
             <Compass className="w-3.5 h-3.5 text-[#8B6BBE]" />
             <span>Vedic Archetypes</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('features')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-all flex items-center gap-1.5 whitespace-nowrap ${
+              activeTab === 'features'
+                ? 'bg-[rgba(212,175,55,0.20)] text-[#F2D675] font-semibold border border-[rgba(212,175,55,0.35)] shadow-sm'
+                : 'text-[#AABDB7] hover:text-[#F5F4EC]'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5 text-[#F472B6]" />
+            <span>8 Features</span>
           </button>
         </div>
 
@@ -488,6 +502,15 @@ export function TarotSanctuaryView({
       {activeTab === 'archetypes' && (
         <div className="animate-fade-in">
           <TarotArchetypeShell />
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* 4. TAROT FEATURE HUB TAB — 8 New Functions */}
+      {/* ======================================================== */}
+      {activeTab === 'features' && (
+        <div className="animate-fade-in">
+          <TarotFeatureHub astrologyContext={astrologyContext} />
         </div>
       )}
 
