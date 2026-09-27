@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#061411',
+  themeColor: '#03100A',
 };
 
 export default function RootLayout({
@@ -29,7 +29,7 @@ export default function RootLayout({
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icon.svg" />
       </head>
-      <body className="min-h-screen bg-[#061411] text-[#F5F4EC] antialiased selection:bg-[#006B5B]/40 selection:text-[#F2D675]">
+      <body className="min-h-screen bg-[#03100A] text-[#EFF6F2] antialiased selection:bg-[#00A878]/40 selection:text-[#2DDBA0]">
         {children}
         <script
           dangerouslySetInnerHTML={{

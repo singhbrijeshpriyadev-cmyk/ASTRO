@@ -4,38 +4,68 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════════════════════════════
+   KAALIKA — 4-Color Gem Palette
+   ┌─ Jade Green  : #00A878 / #2DDBA0  (vibrant tropical gem)
+   ├─ Pine Green  : #1B4332 / #52B788  (deep forest)
+   ├─ Sapphire Blue : #0F52BA / #7EB8FF (deep gem blue)
+   └─ Slate Blue  : #3D405B / #B8ADFF  (cool muted blue-violet)
+═══════════════════════════════════════════════════════════════════ */
+
 :root {
-  --kaalika-bg: #061411;
-  --kaalika-bg-mid: #0B211B;
-  --kaalika-bg-deep: #102A23;
-  --kaalika-surface: #0B211B;
-  --kaalika-surface-deep: #102A23;
-  --kaalika-surface-deeper: #102A23;
-  --kaalika-peacock: #006B5B;
-  --kaalika-peacock-mid: #006B5B;
-  --kaalika-emerald: #009B77;
-  --kaalika-gold: #D4AF37;
-  --kaalika-gold-soft: #F2D675;
-  --kaalika-text: #F5F4EC;
-  --kaalika-text-secondary: #AABDB7;
-  --kaalika-text-muted: #AABDB7;
-  
-  --kaalika-glass: rgba(11, 33, 27, 0.72);
-  --kaalika-glass-card: rgba(11, 33, 27, 0.82);
-  --kaalika-glass-border: rgba(255, 255, 255, 0.14);
-  --kaalika-glass-border-gold: rgba(212, 175, 55, 0.28);
-  
-  --glass-blur: 24px;
+  /* ── Backgrounds (very dark, green-tinged near-black) ─────────── */
+  --kaalika-bg:           #03100A;   /* deepest near-black bg */
+  --kaalika-bg-mid:       #071A10;   /* mid-dark layer */
+  --kaalika-bg-deep:      #0C2218;   /* panels, surfaces */
+  --kaalika-surface:      #071A10;
+  --kaalika-surface-deep: #0C2218;
+  --kaalika-surface-deeper: #0C2218;
+
+  /* ── Primary accent: Jade Green ─────────────────────────────── */
+  --kaalika-jade:         #00A878;   /* jade green primary */
+  --kaalika-jade-light:   #2DDBA0;   /* jade highlight */
+  --kaalika-jade-deep:    #006B4A;   /* jade shadow */
+
+  /* ── Secondary accent: Pine Green ───────────────────────────── */
+  --kaalika-pine:         #2D6A4F;   /* pine green mid */
+  --kaalika-pine-light:   #52B788;   /* pine highlight */
+  --kaalika-pine-deep:    #1B4332;   /* pine shadow */
+
+  /* ── Tertiary: Sapphire Blue ─────────────────────────────────── */
+  --kaalika-sapphire:     #0F52BA;   /* sapphire blue */
+  --kaalika-sapphire-light: #7EB8FF; /* sapphire highlight */
+  --kaalika-sapphire-deep: #082060;  /* sapphire shadow */
+
+  /* ── Quaternary: Slate Blue ──────────────────────────────────── */
+  --kaalika-slate:        #3D405B;   /* slate blue-grey */
+  --kaalika-slate-light:  #B8ADFF;   /* slate highlight */
+  --kaalika-slate-deep:   #1A1850;   /* slate shadow */
+
+  /* ── Preserved gold accent for headings/ornaments ────────────── */
+  --kaalika-gold:         #D4AF37;
+  --kaalika-gold-soft:    #F2D675;
+
+  /* ── Text ────────────────────────────────────────────────────── */
+  --kaalika-text:           #EFF6F2;   /* slightly warmer white */
+  --kaalika-text-secondary: #8BB5A8;   /* jade-tinted muted text */
+  --kaalika-text-muted:     #6A9A8C;
+
+  /* ── Glass system (using jade-green base tint) ───────────────── */
+  --kaalika-glass:        rgba(7, 26, 16, 0.78);
+  --kaalika-glass-card:   rgba(7, 26, 16, 0.88);
+  --kaalika-glass-border: rgba(0, 200, 140, 0.16);            /* jade tint border */
+  --kaalika-glass-border-gold: rgba(45, 219, 160, 0.25);     /* jade as "gold" */
+
+  --glass-blur:   24px;
   --glass-radius: 30px;
-  --glass-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  --glass-shadow: 0 20px 60px rgba(0, 0, 0, 0.50);
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
   min-height: 100%;
 }
 
@@ -49,7 +79,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Base button reset to avoid native browser appearance */
 button {
   background: transparent;
   border: none;
@@ -59,233 +88,202 @@ button {
   padding: 0;
 }
 
-/* Atmospheric Celestial Canvas */
+/* ── Atmospheric Celestial Canvas (jade + sapphire dual glow) ──── */
 .celestial-canvas {
-  background: 
-    radial-gradient(ellipse 90% 70% at 50% -10%, rgba(0, 107, 91, 0.22), transparent 70%),
-    radial-gradient(ellipse 60% 50% at 85% 40%, rgba(0, 155, 119, 0.10), transparent 60%),
-    radial-gradient(ellipse 70% 60% at 15% 75%, rgba(0, 107, 91, 0.15), transparent 70%),
-    #061411;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% -10%, rgba(0, 168, 120, 0.22), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 85% 40%,  rgba(15, 82, 186, 0.12), transparent 60%),
+    radial-gradient(ellipse 70% 60% at 15% 75%,  rgba(45, 107, 79, 0.18), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 70% 90%,  rgba(61, 64, 91, 0.14), transparent 60%),
+    #03100A;
 }
 
-/* Low-opacity astronomical constellation / coordinate grid */
+/* ── Astronomical grid (jade-tinted) ─────────────────────────── */
 .astronomical-grid {
-  background-image: 
-    linear-gradient(to right, rgba(212, 175, 55, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(212, 175, 55, 0.025) 1px, transparent 1px);
+  background-image:
+    linear-gradient(to right, rgba(0, 168, 120, 0.028) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 168, 120, 0.028) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
-/* Signature Horizontal Liquid Glass Dock */
+/* ── Liquid Glass Dock ────────────────────────────────────────── */
 .liquid-glass-dock {
-  background: rgba(11, 33, 27, 0.75);
+  background: rgba(7, 26, 16, 0.80);
   background-image: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.02) 100%
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(0, 168, 120, 0.04) 100%
   );
-  backdrop-filter: blur(24px) saturate(150%);
-  -webkit-backdrop-filter: blur(24px) saturate(150%);
-  border: 1px solid rgba(212, 175, 55, 0.25);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.60), 0 0 0 1px rgba(212, 175, 55, 0.15);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(0, 200, 140, 0.22);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.60),
+    0 0 0 1px rgba(0, 168, 120, 0.12),
+    inset 0 1px 0 rgba(45, 219, 160, 0.08);
   border-radius: 32px;
 }
 
-/* Signature Liquid Glass Card */
+/* ── Liquid Glass Card ────────────────────────────────────────── */
 .liquid-glass-card {
-  background: rgba(11, 33, 27, 0.75);
+  background: rgba(7, 26, 16, 0.78);
   background-image: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.04) 0%,
-    rgba(0, 107, 91, 0.03) 100%
+    145deg,
+    rgba(0, 168, 120, 0.06) 0%,
+    rgba(15, 82, 186, 0.04) 100%
   );
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid rgba(212, 175, 55, 0.25);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(0, 200, 140, 0.22);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.45),
+    0 0 30px rgba(0, 168, 120, 0.08);
   border-radius: 20px;
 }
 
-/* Subtle Secondary Glass Panel */
+/* ── Liquid Glass Panel ───────────────────────────────────────── */
 .liquid-glass-panel {
-  background: rgba(16, 42, 35, 0.72);
+  background: rgba(12, 34, 24, 0.75);
   background-image: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.04) 0%,
-    rgba(255, 255, 255, 0.01) 100%
+    rgba(45, 219, 160, 0.05) 0%,
+    rgba(15, 82, 186, 0.03) 100%
   );
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(212, 175, 55, 0.25);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.40);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(0, 200, 140, 0.20);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.40),
+    0 0 20px rgba(0, 168, 120, 0.06);
   border-radius: 16px;
 }
 
-/* Tarot / Astro+Tarot Liquid Purple Glass */
+/* ── Liquid Glass Purple (Tarot panels — now sapphire/slate) ──── */
 .liquid-glass-purple {
-  background: rgba(16, 42, 35, 0.80);
+  background: rgba(12, 34, 24, 0.85);
   background-image: linear-gradient(
-    180deg,
-    rgba(212, 175, 55, 0.06) 0%,
-    rgba(0, 107, 91, 0.04) 100%
+    145deg,
+    rgba(15, 82, 186, 0.08) 0%,
+    rgba(61, 64, 91, 0.06) 100%
   );
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(212, 175, 55, 0.30);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(126, 184, 255, 0.22);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.45),
+    0 0 30px rgba(15, 82, 186, 0.10);
   border-radius: 20px;
 }
 
-/* Luxury horology scrollbar */
+/* ── Scrollbar (jade-tinted) ─────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #061411;
+  background: #03100A;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(212, 175, 55, 0.25);
+  background: rgba(0, 168, 120, 0.28);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 175, 55, 0.45);
+  background: rgba(45, 219, 160, 0.50);
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Glass Light Reflection Sweep (Requirement 41) */
+/* ── Glass Light Reflection Sweep ─────────────────────────────── */
 @keyframes glass-light-sweep {
-  0% {
-    transform: translateX(-100%) skewX(-15deg);
-    opacity: 0;
-  }
-  20% {
-    opacity: 0.035;
-  }
-  80% {
-    opacity: 0.035;
-  }
-  100% {
-    transform: translateX(200%) skewX(-15deg);
-    opacity: 0;
-  }
+  0%   { transform: translateX(-100%) skewX(-15deg); opacity: 0; }
+  20%  { opacity: 0.035; }
+  80%  { opacity: 0.035; }
+  100% { transform: translateX(200%) skewX(-15deg); opacity: 0; }
 }
 
-.glass-reflection-sweep {
-  position: relative;
-  overflow: hidden;
-}
-
+.glass-reflection-sweep { position: relative; overflow: hidden; }
 .glass-reflection-sweep::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: -50%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.06) 50%,
-    transparent 100%
-  );
+  top: 0; left: -50%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
   pointer-events: none;
   animation: glass-light-sweep 10s ease-in-out infinite;
   animation-delay: 3s;
 }
 
-/* Celestial Shimmer, Pulse, and Float Animations */
-@keyframes celestial-gold-shimmer {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+/* ── Jade shimmer text (replaces gold shimmer) ────────────────── */
+@keyframes jade-shimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
 .shimmer-gold-text {
-  background: linear-gradient(90deg, #F5F4EC 0%, #F2D675 25%, #FFFFFF 50%, #D4AF37 75%, #F5F4EC 100%);
+  background: linear-gradient(90deg,
+    #EFF6F2 0%,
+    #2DDBA0 20%,
+    #7EB8FF 40%,
+    #B8ADFF 60%,
+    #52B788 80%,
+    #EFF6F2 100%
+  );
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: celestial-gold-shimmer 7s linear infinite;
+  animation: jade-shimmer 8s linear infinite;
 }
 
+/* ── Pulse aura (jade + sapphire dual-color pulse) ────────────── */
 @keyframes celestial-pulse-aura {
   0%, 100% {
-    box-shadow: 0 0 14px rgba(212, 175, 55, 0.25), 0 0 30px rgba(0, 155, 119, 0.15);
+    box-shadow:
+      0 0 14px rgba(0, 168, 120, 0.28),
+      0 0 30px rgba(15, 82, 186, 0.14);
   }
   50% {
-    box-shadow: 0 0 28px rgba(212, 175, 55, 0.45), 0 0 50px rgba(0, 155, 119, 0.25);
+    box-shadow:
+      0 0 28px rgba(0, 168, 120, 0.50),
+      0 0 50px rgba(15, 82, 186, 0.28);
   }
 }
 
-.pulse-aura {
-  animation: celestial-pulse-aura 4s ease-in-out infinite;
-}
+.pulse-aura { animation: celestial-pulse-aura 4s ease-in-out infinite; }
 
+/* ── Float animation ──────────────────────────────────────────── */
 @keyframes celestial-float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-5px); }
 }
 
-.celestial-float-slow {
-  animation: celestial-float 6s ease-in-out infinite;
-}
+.celestial-float-slow { animation: celestial-float 6s ease-in-out infinite; }
 
+/* ── Bindu ripple ─────────────────────────────────────────────── */
 @keyframes bindu-ripple {
-  0% {
-    r: 4;
-    opacity: 0.8;
-    stroke-width: 1.5;
-  }
-  100% {
-    r: 32;
-    opacity: 0;
-    stroke-width: 0.4;
-  }
+  0%   { r: 4;  opacity: 0.8; stroke-width: 1.5; }
+  100% { r: 32; opacity: 0;   stroke-width: 0.4; }
 }
 
-.bindu-ripple-ring {
-  animation: bindu-ripple 3.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
-}
+.bindu-ripple-ring         { animation: bindu-ripple 3.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite; }
+.bindu-ripple-ring-delayed { animation: bindu-ripple 3.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite; animation-delay: 1.6s; }
 
-.bindu-ripple-ring-delayed {
-  animation: bindu-ripple 3.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
-  animation-delay: 1.6s;
-}
-
-/* Accessibility: Respect Reduced Motion (Requirement 52) */
+/* ── Reduced motion ───────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-
   .glass-reflection-sweep::after,
   .shimmer-gold-text,
   .pulse-aura,
   .celestial-float-slow,
   .bindu-ripple-ring,
-  .bindu-ripple-ring-delayed {
-    animation: none !important;
-  }
+  .bindu-ripple-ring-delayed { animation: none !important; }
 }
-
-
