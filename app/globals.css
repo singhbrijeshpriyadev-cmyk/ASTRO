@@ -272,6 +272,34 @@ button {
 .bindu-ripple-ring         { animation: bindu-ripple 3.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite; }
 .bindu-ripple-ring-delayed { animation: bindu-ripple 3.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite; animation-delay: 1.6s; }
 
+/* ── 120 FPS High-Refresh Hardware Acceleration Utilities ─────── */
+.gpu-120fps {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1400px;
+  -webkit-perspective: 1400px;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  will-change: transform, opacity;
+  contain: layout style paint;
+}
+
+.gpu-layer {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.high-refresh-smooth {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  image-rendering: -webkit-optimize-contrast;
+  text-rendering: optimizeLegibility;
+}
+
 /* ── Reduced motion ───────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

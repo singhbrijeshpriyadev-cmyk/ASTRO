@@ -69,7 +69,11 @@ export function ActiveReceptorSlot({
           repeat: isDrawing ? 0 : Infinity,
           ease: 'easeInOut',
         }}
-        className={`relative w-[180px] sm:w-[200px] aspect-[7/12] rounded-2xl border-2 border-dashed flex flex-col items-center justify-center text-center p-4 backdrop-blur-md overflow-hidden transition-all duration-300 ${
+        style={{
+          willChange: 'transform, border-color, box-shadow',
+          transform: 'translate3d(0, 0, 0)',
+        }}
+        className={`relative w-[180px] sm:w-[200px] aspect-[7/12] rounded-2xl border-2 border-dashed flex flex-col items-center justify-center text-center p-4 backdrop-blur-md overflow-hidden transition-all duration-300 gpu-120fps ${
           isActive
             ? 'bg-[radial-gradient(ellipse_at_center,rgba(16,42,35,0.6)_0%,rgba(6,20,17,0.85)_100%)]'
             : 'border-[rgba(212,175,55,0.2)] bg-[rgba(6,20,17,0.35)]'

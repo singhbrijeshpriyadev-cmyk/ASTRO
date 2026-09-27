@@ -169,12 +169,14 @@ export function CardFannedSpread({
                     handleCardClick(idx);
                   }
                 }}
-                className={`relative flex-shrink-0 w-[114px] sm:w-[134px] aspect-[7/12] cursor-pointer pointer-events-auto transition-opacity duration-300 ${
+                className={`relative flex-shrink-0 w-[114px] sm:w-[134px] aspect-[7/12] cursor-pointer pointer-events-auto transition-opacity duration-300 gpu-120fps ${
                   isSelected ? 'opacity-20 pointer-events-none' : 'opacity-100'
                 }`}
                 style={{
                   marginLeft: idx === 0 ? 0 : '-72px', // Overlapping deck ribbon
                   zIndex: isAscending ? 200 : isHovered ? 150 : isSelected ? 1 : idx + 2,
+                  willChange: 'transform, opacity',
+                  transform: 'translate3d(0, 0, 0)',
                 }}
                 initial={{
                   opacity: 0,
@@ -207,16 +209,25 @@ export function CardFannedSpread({
                 transition={{
                   y: isAscending
                     ? { duration: 0.65, ease: 'easeOut' }
-                    : { type: 'spring', stiffness: 380, damping: 24 },
+                    : { type: 'spring', stiffness: 420, damping: 26, mass: 0.75, restDelta: 0.0005 },
                   scale: isAscending
                     ? { duration: 0.65, ease: 'easeOut' }
-                    : { type: 'spring', stiffness: 380, damping: 24 },
-                  rotateZ: { type: 'spring', stiffness: 340, damping: 24 },
-                  rotateX: { type: 'spring', stiffness: 340, damping: 24 },
+                    : { type: 'spring', stiffness: 420, damping: 26, mass: 0.75, restDelta: 0.0005 },
+                  rotateZ: { type: 'spring', stiffness: 380, damping: 26, restDelta: 0.0005 },
+                  rotateX: { type: 'spring', stiffness: 380, damping: 26, restDelta: 0.0005 },
                   opacity: isAscending ? { duration: 0.65, times: [0, 0.7, 1] } : { duration: 0.3 },
                   delay: !hasMounted ? idx * 0.006 : 0, // Staggered cascade entrance on first appearance!
                 }}
               >
+                {/* 120 FPS Iridescent Gold Holographic Sheen on hover */}
+                {isHovered && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="absolute -inset-[1px] rounded-2xl pointer-events-none border border-[rgba(242,214,117,0.7)] shadow-[0_0_15px_rgba(212,175,55,0.5)] z-20"
+                  />
+                )}
+
                 {/* Golden & Emerald Hover Aura Bloom */}
                 {isHovered && (
                   <motion.div

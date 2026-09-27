@@ -215,9 +215,9 @@ export function CinematicDrawnCard({
           )}
         </AnimatePresence>
 
-        {/* The 3D Rigid Card Body */}
+        {/* The 3D Rigid Card Body — 120 FPS GPU Accelerated */}
         <motion.div
-          className="relative w-full h-full rounded-2xl"
+          className="relative w-full h-full rounded-2xl gpu-120fps"
           animate={{
             rotateY: internalFlipped ? 180 : 0,
             y: isFlipping ? -18 : 0, // Apex lift during 3D flip
@@ -229,11 +229,13 @@ export function CinematicDrawnCard({
             rotateY: { duration: 0.75, ease: [0.34, 1.25, 0.64, 1] },
             y: { duration: 0.75, ease: 'easeInOut' },
             scale: { duration: 0.75, ease: 'easeInOut' },
-            rotateX: { type: 'spring', stiffness: 260, damping: 24 },
-            rotateZ: { type: 'spring', stiffness: 260, damping: 24 },
+            rotateX: { type: 'spring', stiffness: 360, damping: 26, restDelta: 0.0005 },
+            rotateZ: { type: 'spring', stiffness: 360, damping: 26, restDelta: 0.0005 },
           }}
           style={{
             transformStyle: 'preserve-3d',
+            willChange: 'transform',
+            transform: 'translate3d(0, 0, 0)',
           }}
         >
           {/* ======================================================== */}

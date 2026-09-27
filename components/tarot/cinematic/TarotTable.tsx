@@ -21,6 +21,7 @@ import { CardDetailModal } from './CardDetailModal';
 import { TarotSpreadSelector, TAROT_SPREADS, TarotSpreadDef } from './TarotSpreadSelector';
 import { ReadingResultSummary, DrawnCardItem } from './ReadingResultSummary';
 import { ReadingHistoryModal } from './ReadingHistoryModal';
+import { Tarot120FpsParticles } from './Tarot120FpsParticles';
 import { 
   Volume2, 
   VolumeX, 
@@ -30,7 +31,8 @@ import {
   Compass, 
   HelpCircle,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Zap
 } from 'lucide-react';
 
 type TarotTableState = 
@@ -170,8 +172,11 @@ export function TarotTable() {
       }}
     >
       {/* ======================================================== */}
-      {/* ATMOSPHERIC BACKGROUND EFFECTS (Fog, Grid, Ambient Glow) */}
+      {/* ATMOSPHERIC BACKGROUND EFFECTS (Fog, 120 FPS Particles, Glow) */}
       {/* ======================================================== */}
+      {/* 120 FPS Hardware-Accelerated Celestial Particle Starfield */}
+      <Tarot120FpsParticles />
+
       {/* Subtle table velvet texture */}
       <div
         className="absolute inset-0 opacity-[0.035] pointer-events-none"
@@ -225,6 +230,13 @@ export function TarotTable() {
 
         {/* Toolbar Controls */}
         <div className="flex items-center gap-2">
+          {/* 120 FPS High-Refresh Hardware Acceleration Telemetry Badge */}
+          <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[rgba(0,155,119,0.12)] border border-[rgba(0,155,119,0.35)] text-[#2DDBA0] text-[11px] font-mono shadow-[0_0_12px_rgba(0,155,119,0.2)]">
+            <Zap className="w-3.5 h-3.5 text-[#2DDBA0] animate-pulse" />
+            <span className="font-bold tracking-wider">120 FPS REFRESH</span>
+            <span className="text-[9px] text-[#AABDB7]/80 uppercase">GPU ACCELERATED</span>
+          </div>
+
           {/* Sound Toggle */}
           <button
             onClick={handleToggleMute}
