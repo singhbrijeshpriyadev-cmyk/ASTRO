@@ -837,99 +837,107 @@ const FEATURES: Array<{
   num: string;
 }> = [
   {
+    // 01 · Deep Ocean Navy
     id: 'daily',
     label: 'Daily Card',
     icon: <Sun className="w-8 h-8" />,
     tagline: 'One card every day',
-    gradient: 'linear-gradient(135deg, #1A1000 0%, #3D2800 50%, #1A1000 100%)',
-    glow: 'rgba(212,175,55,0.55)',
-    border: 'rgba(212,175,55,0.7)',
-    labelColor: '#F2D675',
-    badge: 'bg-[rgba(212,175,55,0.25)] text-[#F2D675] border-[rgba(212,175,55,0.6)]',
+    gradient: 'linear-gradient(145deg, #020818 0%, #061A40 45%, #0A2560 100%)',
+    glow: 'rgba(30,100,220,0.6)',
+    border: 'rgba(56,132,255,0.75)',
+    labelColor: '#6EB4FF',
+    badge: 'bg-[rgba(56,132,255,0.2)] text-[#6EB4FF] border-[rgba(56,132,255,0.6)]',
     num: '01',
   },
   {
+    // 02 · Electric Cobalt
     id: 'celtic',
     label: 'Celtic Cross',
     icon: <Star className="w-8 h-8" />,
     tagline: '10-card deep spread',
-    gradient: 'linear-gradient(135deg, #0D0020 0%, #2D1060 50%, #0D0020 100%)',
-    glow: 'rgba(139,107,190,0.55)',
-    border: 'rgba(139,107,190,0.7)',
-    labelColor: '#C4B5FD',
-    badge: 'bg-[rgba(139,107,190,0.25)] text-[#C4B5FD] border-[rgba(139,107,190,0.6)]',
+    gradient: 'linear-gradient(145deg, #030D22 0%, #0C2A6E 45%, #1040A8 100%)',
+    glow: 'rgba(64,140,255,0.65)',
+    border: 'rgba(96,168,255,0.8)',
+    labelColor: '#91C2FF',
+    badge: 'bg-[rgba(96,168,255,0.2)] text-[#91C2FF] border-[rgba(96,168,255,0.65)]',
     num: '02',
   },
   {
+    // 03 · Icy Cyan
     id: 'journal',
     label: 'Journal',
     icon: <BookOpen className="w-8 h-8" />,
     tagline: 'Track reflections',
-    gradient: 'linear-gradient(135deg, #001A14 0%, #003D2A 50%, #001A14 100%)',
-    glow: 'rgba(52,211,153,0.45)',
-    border: 'rgba(52,211,153,0.6)',
-    labelColor: '#34D399',
-    badge: 'bg-[rgba(52,211,153,0.2)] text-[#34D399] border-[rgba(52,211,153,0.55)]',
+    gradient: 'linear-gradient(145deg, #021418 0%, #053848 45%, #0A5868 100%)',
+    glow: 'rgba(34,211,238,0.55)',
+    border: 'rgba(34,211,238,0.75)',
+    labelColor: '#67E8F9',
+    badge: 'bg-[rgba(34,211,238,0.18)] text-[#67E8F9] border-[rgba(34,211,238,0.6)]',
     num: '03',
   },
   {
+    // 04 · Liquid Aqua
     id: 'moment',
     label: 'Card of Moment',
     icon: <Sparkles className="w-8 h-8" />,
     tagline: 'AI planetary pick',
-    gradient: 'linear-gradient(135deg, #1A0A00 0%, #3D1A00 50%, #1A0A00 100%)',
-    glow: 'rgba(251,146,60,0.5)',
-    border: 'rgba(251,146,60,0.65)',
-    labelColor: '#FB923C',
-    badge: 'bg-[rgba(251,146,60,0.2)] text-[#FB923C] border-[rgba(251,146,60,0.55)]',
+    gradient: 'linear-gradient(145deg, #011520 0%, #023D5A 45%, #045C7A 100%)',
+    glow: 'rgba(14,165,233,0.6)',
+    border: 'rgba(56,189,248,0.78)',
+    labelColor: '#7DD3FC',
+    badge: 'bg-[rgba(56,189,248,0.2)] text-[#7DD3FC] border-[rgba(56,189,248,0.65)]',
     num: '04',
   },
   {
+    // 05 · Royal Sapphire
     id: 'year',
     label: 'Year Ahead',
     icon: <Calendar className="w-8 h-8" />,
     tagline: '12 months spread',
-    gradient: 'linear-gradient(135deg, #001520 0%, #003050 50%, #001520 100%)',
-    glow: 'rgba(56,189,248,0.45)',
-    border: 'rgba(56,189,248,0.6)',
-    labelColor: '#38BDF8',
-    badge: 'bg-[rgba(56,189,248,0.2)] text-[#38BDF8] border-[rgba(56,189,248,0.55)]',
+    gradient: 'linear-gradient(145deg, #020A28 0%, #07205C 45%, #0D3490 100%)',
+    glow: 'rgba(99,102,241,0.6)',
+    border: 'rgba(129,140,248,0.78)',
+    labelColor: '#A5B4FC',
+    badge: 'bg-[rgba(129,140,248,0.2)] text-[#A5B4FC] border-[rgba(129,140,248,0.65)]',
     num: '05',
   },
   {
+    // 06 · Glacier Periwinkle
     id: 'relationship',
     label: 'Relationship',
     icon: <Heart className="w-8 h-8" />,
     tagline: 'Dual soul spread',
-    gradient: 'linear-gradient(135deg, #1A0012 0%, #450030 50%, #1A0012 100%)',
-    glow: 'rgba(244,114,182,0.5)',
-    border: 'rgba(244,114,182,0.65)',
-    labelColor: '#F472B6',
-    badge: 'bg-[rgba(244,114,182,0.2)] text-[#F472B6] border-[rgba(244,114,182,0.55)]',
+    gradient: 'linear-gradient(145deg, #04101E 0%, #0C2848 45%, #183870 100%)',
+    glow: 'rgba(147,197,253,0.55)',
+    border: 'rgba(147,197,253,0.75)',
+    labelColor: '#BAD6FF',
+    badge: 'bg-[rgba(147,197,253,0.18)] text-[#BAD6FF] border-[rgba(147,197,253,0.6)]',
     num: '06',
   },
   {
+    // 07 · Midnight Indigo-Blue
     id: 'meditation',
     label: 'Meditation',
     icon: <Moon className="w-8 h-8" />,
     tagline: 'Immersive mode',
-    gradient: 'linear-gradient(135deg, #000D20 0%, #001840 50%, #000D20 100%)',
-    glow: 'rgba(99,179,237,0.45)',
-    border: 'rgba(99,179,237,0.6)',
-    labelColor: '#93C5FD',
-    badge: 'bg-[rgba(99,179,237,0.2)] text-[#93C5FD] border-[rgba(99,179,237,0.55)]',
+    gradient: 'linear-gradient(145deg, #010510 0%, #060D30 45%, #0C1855 100%)',
+    glow: 'rgba(79,70,229,0.6)',
+    border: 'rgba(99,102,241,0.75)',
+    labelColor: '#C7D2FE',
+    badge: 'bg-[rgba(99,102,241,0.2)] text-[#C7D2FE] border-[rgba(99,102,241,0.6)]',
     num: '07',
   },
   {
+    // 08 · Steel-Blue Arctic
     id: 'yesno',
     label: 'Yes / No Oracle',
     icon: <HelpCircle className="w-8 h-8" />,
     tagline: 'Instant answer',
-    gradient: 'linear-gradient(135deg, #0A1A00 0%, #1A3800 50%, #0A1A00 100%)',
-    glow: 'rgba(163,230,53,0.45)',
-    border: 'rgba(163,230,53,0.6)',
-    labelColor: '#A3E635',
-    badge: 'bg-[rgba(163,230,53,0.2)] text-[#A3E635] border-[rgba(163,230,53,0.55)]',
+    gradient: 'linear-gradient(145deg, #021018 0%, #062840 45%, #0C4060 100%)',
+    glow: 'rgba(125,211,252,0.55)',
+    border: 'rgba(125,211,252,0.75)',
+    labelColor: '#BAE6FD',
+    badge: 'bg-[rgba(125,211,252,0.2)] text-[#BAE6FD] border-[rgba(125,211,252,0.6)]',
     num: '08',
   },
 ];
@@ -945,10 +953,10 @@ export function TarotFeatureHub({ astrologyContext }: FeatureHubProps) {
           {/* Header */}
           <div className="text-center space-y-3">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full"
-              style={{ background: 'linear-gradient(90deg,rgba(212,175,55,0.18),rgba(139,107,190,0.18))', border: '1px solid rgba(212,175,55,0.4)' }}>
-              <Sparkles className="w-3.5 h-3.5 text-[#F2D675]" />
-              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#D4AF37]">8 Sacred Practices</span>
-              <Sparkles className="w-3.5 h-3.5 text-[#C4B5FD]" />
+              style={{ background: 'linear-gradient(90deg, rgba(14,120,220,0.25), rgba(34,211,238,0.2))', border: '1px solid rgba(56,189,248,0.5)', boxShadow: '0 0 24px rgba(30,100,220,0.3)' }}>
+              <Sparkles className="w-3.5 h-3.5 text-[#67E8F9]" />
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#7DD3FC]">8 Sacred Practices</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#93C5FD]" />
             </div>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#F5F4EC] tracking-tight">
               ✦ Tarot Feature Sanctuary
