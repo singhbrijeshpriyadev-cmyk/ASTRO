@@ -837,107 +837,107 @@ const FEATURES: Array<{
   num: string;
 }> = [
   {
-    // 01 · Deep Ocean Navy
+    // 01 · Jade Green — bright, gem-like tropical green
     id: 'daily',
     label: 'Daily Card',
     icon: <Sun className="w-8 h-8" />,
     tagline: 'One card every day',
-    gradient: 'linear-gradient(145deg, #020818 0%, #061A40 45%, #0A2560 100%)',
-    glow: 'rgba(30,100,220,0.6)',
-    border: 'rgba(56,132,255,0.75)',
-    labelColor: '#6EB4FF',
-    badge: 'bg-[rgba(56,132,255,0.2)] text-[#6EB4FF] border-[rgba(56,132,255,0.6)]',
+    gradient: 'linear-gradient(145deg, #011A12 0%, #024D36 45%, #006B4A 100%)',
+    glow: 'rgba(0,168,120,0.65)',
+    border: 'rgba(0,200,140,0.78)',
+    labelColor: '#2DDBA0',
+    badge: 'bg-[rgba(0,200,140,0.18)] text-[#2DDBA0] border-[rgba(0,200,140,0.6)]',
     num: '01',
   },
   {
-    // 02 · Electric Cobalt
+    // 02 · Pine Green — deep forest, dark rich green
     id: 'celtic',
     label: 'Celtic Cross',
     icon: <Star className="w-8 h-8" />,
     tagline: '10-card deep spread',
-    gradient: 'linear-gradient(145deg, #030D22 0%, #0C2A6E 45%, #1040A8 100%)',
-    glow: 'rgba(64,140,255,0.65)',
-    border: 'rgba(96,168,255,0.8)',
-    labelColor: '#91C2FF',
-    badge: 'bg-[rgba(96,168,255,0.2)] text-[#91C2FF] border-[rgba(96,168,255,0.65)]',
+    gradient: 'linear-gradient(145deg, #010E08 0%, #042915 45%, #073D1E 100%)',
+    glow: 'rgba(34,139,68,0.65)',
+    border: 'rgba(52,185,90,0.75)',
+    labelColor: '#6EE896',
+    badge: 'bg-[rgba(52,185,90,0.18)] text-[#6EE896] border-[rgba(52,185,90,0.6)]',
     num: '02',
   },
   {
-    // 03 · Icy Cyan
+    // 03 · Sapphire Blue — deep gem-quality blue
     id: 'journal',
     label: 'Journal',
     icon: <BookOpen className="w-8 h-8" />,
     tagline: 'Track reflections',
-    gradient: 'linear-gradient(145deg, #021418 0%, #053848 45%, #0A5868 100%)',
-    glow: 'rgba(34,211,238,0.55)',
-    border: 'rgba(34,211,238,0.75)',
-    labelColor: '#67E8F9',
-    badge: 'bg-[rgba(34,211,238,0.18)] text-[#67E8F9] border-[rgba(34,211,238,0.6)]',
+    gradient: 'linear-gradient(145deg, #020A1E 0%, #082060 45%, #0F3494 100%)',
+    glow: 'rgba(15,82,186,0.65)',
+    border: 'rgba(60,130,240,0.78)',
+    labelColor: '#7EB8FF',
+    badge: 'bg-[rgba(60,130,240,0.2)] text-[#7EB8FF] border-[rgba(60,130,240,0.62)]',
     num: '03',
   },
   {
-    // 04 · Liquid Aqua
+    // 04 · Slate Blue — muted cool blue-purple
     id: 'moment',
     label: 'Card of Moment',
     icon: <Sparkles className="w-8 h-8" />,
     tagline: 'AI planetary pick',
-    gradient: 'linear-gradient(145deg, #011520 0%, #023D5A 45%, #045C7A 100%)',
-    glow: 'rgba(14,165,233,0.6)',
-    border: 'rgba(56,189,248,0.78)',
-    labelColor: '#7DD3FC',
-    badge: 'bg-[rgba(56,189,248,0.2)] text-[#7DD3FC] border-[rgba(56,189,248,0.65)]',
+    gradient: 'linear-gradient(145deg, #08071A 0%, #1A1850 45%, #252275 100%)',
+    glow: 'rgba(106,90,205,0.65)',
+    border: 'rgba(148,130,240,0.78)',
+    labelColor: '#B8ADFF',
+    badge: 'bg-[rgba(148,130,240,0.2)] text-[#B8ADFF] border-[rgba(148,130,240,0.62)]',
     num: '04',
   },
   {
-    // 05 · Royal Sapphire
+    // 05 · Jade Green — lighter, lighter jade variant
     id: 'year',
     label: 'Year Ahead',
     icon: <Calendar className="w-8 h-8" />,
     tagline: '12 months spread',
-    gradient: 'linear-gradient(145deg, #020A28 0%, #07205C 45%, #0D3490 100%)',
-    glow: 'rgba(99,102,241,0.6)',
-    border: 'rgba(129,140,248,0.78)',
-    labelColor: '#A5B4FC',
-    badge: 'bg-[rgba(129,140,248,0.2)] text-[#A5B4FC] border-[rgba(129,140,248,0.65)]',
+    gradient: 'linear-gradient(145deg, #011510 0%, #034030 45%, #025E44 100%)',
+    glow: 'rgba(0,185,130,0.6)',
+    border: 'rgba(32,210,155,0.75)',
+    labelColor: '#4EDDB5',
+    badge: 'bg-[rgba(32,210,155,0.18)] text-[#4EDDB5] border-[rgba(32,210,155,0.58)]',
     num: '05',
   },
   {
-    // 06 · Glacier Periwinkle
+    // 06 · Pine Green — deeper pine variant
     id: 'relationship',
     label: 'Relationship',
     icon: <Heart className="w-8 h-8" />,
     tagline: 'Dual soul spread',
-    gradient: 'linear-gradient(145deg, #04101E 0%, #0C2848 45%, #183870 100%)',
-    glow: 'rgba(147,197,253,0.55)',
-    border: 'rgba(147,197,253,0.75)',
-    labelColor: '#BAD6FF',
-    badge: 'bg-[rgba(147,197,253,0.18)] text-[#BAD6FF] border-[rgba(147,197,253,0.6)]',
+    gradient: 'linear-gradient(145deg, #020F07 0%, #05321A 45%, #08502A 100%)',
+    glow: 'rgba(22,160,72,0.6)',
+    border: 'rgba(46,200,100,0.72)',
+    labelColor: '#80EFA8',
+    badge: 'bg-[rgba(46,200,100,0.18)] text-[#80EFA8] border-[rgba(46,200,100,0.58)]',
     num: '06',
   },
   {
-    // 07 · Midnight Indigo-Blue
+    // 07 · Sapphire Blue — richer sapphire variant
     id: 'meditation',
     label: 'Meditation',
     icon: <Moon className="w-8 h-8" />,
     tagline: 'Immersive mode',
-    gradient: 'linear-gradient(145deg, #010510 0%, #060D30 45%, #0C1855 100%)',
-    glow: 'rgba(79,70,229,0.6)',
-    border: 'rgba(99,102,241,0.75)',
-    labelColor: '#C7D2FE',
-    badge: 'bg-[rgba(99,102,241,0.2)] text-[#C7D2FE] border-[rgba(99,102,241,0.6)]',
+    gradient: 'linear-gradient(145deg, #010818 0%, #051A52 45%, #0C2C80 100%)',
+    glow: 'rgba(30,100,210,0.65)',
+    border: 'rgba(80,150,255,0.75)',
+    labelColor: '#A0C8FF',
+    badge: 'bg-[rgba(80,150,255,0.2)] text-[#A0C8FF] border-[rgba(80,150,255,0.6)]',
     num: '07',
   },
   {
-    // 08 · Steel-Blue Arctic
+    // 08 · Slate Blue — deeper slate variant
     id: 'yesno',
     label: 'Yes / No Oracle',
     icon: <HelpCircle className="w-8 h-8" />,
     tagline: 'Instant answer',
-    gradient: 'linear-gradient(145deg, #021018 0%, #062840 45%, #0C4060 100%)',
-    glow: 'rgba(125,211,252,0.55)',
-    border: 'rgba(125,211,252,0.75)',
-    labelColor: '#BAE6FD',
-    badge: 'bg-[rgba(125,211,252,0.2)] text-[#BAE6FD] border-[rgba(125,211,252,0.6)]',
+    gradient: 'linear-gradient(145deg, #050618 0%, #130F40 45%, #1E196A 100%)',
+    glow: 'rgba(90,75,200,0.62)',
+    border: 'rgba(130,118,230,0.75)',
+    labelColor: '#C2BAFF',
+    badge: 'bg-[rgba(130,118,230,0.2)] text-[#C2BAFF] border-[rgba(130,118,230,0.6)]',
     num: '08',
   },
 ];
@@ -953,10 +953,10 @@ export function TarotFeatureHub({ astrologyContext }: FeatureHubProps) {
           {/* Header */}
           <div className="text-center space-y-3">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full"
-              style={{ background: 'linear-gradient(90deg, rgba(14,120,220,0.25), rgba(34,211,238,0.2))', border: '1px solid rgba(56,189,248,0.5)', boxShadow: '0 0 24px rgba(30,100,220,0.3)' }}>
-              <Sparkles className="w-3.5 h-3.5 text-[#67E8F9]" />
-              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#7DD3FC]">8 Sacred Practices</span>
-              <Sparkles className="w-3.5 h-3.5 text-[#93C5FD]" />
+              style={{ background: 'linear-gradient(90deg, rgba(0,168,120,0.22), rgba(15,82,186,0.22))', border: '1px solid rgba(46,219,160,0.5)', boxShadow: '0 0 22px rgba(0,168,120,0.28)' }}>
+              <Sparkles className="w-3.5 h-3.5 text-[#2DDBA0]" />
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#67C4A8]">8 Sacred Practices</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#7EB8FF]" />
             </div>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#F5F4EC] tracking-tight">
               ✦ Tarot Feature Sanctuary
