@@ -16,6 +16,7 @@ import { DeckShuffleAnimation } from './DeckShuffleAnimation';
 import { DeckCutInteraction } from './DeckCutInteraction';
 import { CardFannedSpread } from './CardFannedSpread';
 import { CinematicDrawnCard } from './CinematicDrawnCard';
+import { ActiveReceptorSlot } from './ActiveReceptorSlot';
 import { CardDetailModal } from './CardDetailModal';
 import { TarotSpreadSelector, TAROT_SPREADS, TarotSpreadDef } from './TarotSpreadSelector';
 import { ReadingResultSummary, DrawnCardItem } from './ReadingResultSummary';
@@ -55,6 +56,7 @@ export function TarotTable() {
   const [selectedDeckIndices, setSelectedDeckIndices] = useState<number[]>([]);
   const [drawnCards, setDrawnCards] = useState<DrawnCardItem[]>([]);
   const [isDrawingInProgress, setIsDrawingInProgress] = useState(false);
+  const [hoveredRibbonIndex, setHoveredRibbonIndex] = useState<number | null>(null);
 
   // Detailed Modal Card State
   const [modalCard, setModalCard] = useState<{ card: TarotCard; orientation: TarotOrientation } | null>(null);
@@ -344,75 +346,15 @@ export function TarotTable() {
                         onCardClick={() => setModalCard({ card: drawnItem.card, orientation: drawnItem.orientation })}
                       />
                     ) : (
-                      /* Empty Target Reading Slot with active portal beacon */
-                      (() => {
-                        const isActiveSlot = sIdx === drawnCards.length;
-                        return (
-                          <div className="flex flex-col items-center w-[180px] sm:w-[200px]">
-                            <div className="text-center mb-3">
-                              <span className={`text-[11px] font-mono tracking-widest uppercase font-bold block ${
-                                isActiveSlot ? 'text-[#F2D675] drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]' : 'text-[#AABDB7]'
-                              }`}>
-                                {slot.title}
-                              </span>
-                              <span className="text-[10px] font-sans text-[#8BB5A8] block">
-                                {slot.subtitle}
-                              </span>
-                            </div>
-                            <motion.div
-                              animate={
-                                isActiveSlot
-                                  ? {
-                                      scale: [1, 1.025, 1],
-                                      borderColor: ['rgba(212,175,55,0.4)', 'rgba(0,155,119,0.8)', 'rgba(212,175,55,0.4)'],
-                                      boxShadow: [
-                                        '0 0 15px rgba(212,175,55,0.15)',
-                                        '0 0 30px rgba(0,155,119,0.35)',
-                                        '0 0 15px rgba(212,175,55,0.15)',
-                                      ],
-                                    }
-                                  : {}
-                              }
-                              transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-                              className={`relative w-[180px] sm:w-[200px] aspect-[7/12] rounded-2xl border-2 border-dashed flex flex-col items-center justify-center text-center p-4 backdrop-blur-sm transition-colors ${
-                                isActiveSlot
-                                  ? 'bg-[rgba(16,42,35,0.5)] border-[rgba(212,175,55,0.6)]'
-                                  : 'border-[rgba(212,175,55,0.2)] bg-[rgba(6,20,17,0.35)]'
-                              }`}
-                            >
-                              <div
-                                className={`w-11 h-11 rounded-full border border-dashed flex items-center justify-center mb-2 transition-all ${
-                                  isActiveSlot
-                                    ? 'border-[#D4AF37] bg-[rgba(212,175,55,0.12)] text-[#F2D675] shadow-[0_0_12px_rgba(212,175,55,0.5)]'
-                                    : 'border-[rgba(0,155,119,0.35)] text-[#D4AF37]/50'
-                                }`}
-                              >
-                                {isActiveSlot ? (
-                                  <Sparkles className="w-5 h-5 animate-spin" style={{ animationDuration: '6s' }} />
-                                ) : (
-                                  <span className="font-mono text-sm">{sIdx + 1}</span>
-                                )}
-                              </div>
-                              <span className={`text-[11px] font-mono tracking-wider font-semibold ${
-                                isActiveSlot ? 'text-[#F2D675]' : 'text-[#AABDB7]/70'
-                              }`}>
-                                {isActiveSlot
-                                  ? isDrawingInProgress
-                                    ? 'Convergencing…'
-                                    : 'Active Receptor'
-                                  : 'Reserved Slot'}
-                              </span>
-                              <span className="text-[10px] font-sans text-[#8BB5A8]/80 mt-1 max-w-[140px] leading-tight">
-                                {isActiveSlot
-                                  ? isDrawingInProgress
-                                    ? 'Card is flying into position'
-                                    : 'Pick a card from ribbon'
-                                  : `Position ${sIdx + 1}`}
-                              </span>
-                            </motion.div>
-                          </div>
-                        );
-                      })()
+                      /* Empty Target Reading Slot with active portal beacon & hover resonance */
+                      <ActiveReceptorSlot
+                        slotNumber={sIdx + 1}
+                        title={slot.title}
+                        subtitle={slot.subtitle}
+                        isActive={sIdx === drawnCards.length}
+                        isDrawing={isDrawingInProgress && sIdx === drawnCards.length}
+                        hoveredCardIndex={hoveredRibbonIndex}
+                      />
                     )}
                   </div>
                 );
@@ -426,6 +368,7 @@ export function TarotTable() {
                   totalCards={78}
                   selectedIndices={selectedDeckIndices}
                   onSelectCard={handleSelectFannedCard}
+                  onHoverCard={setHoveredRibbonIndex}
                   disabled={isDrawingInProgress}
                   promptText={
                     isDrawingInProgress
