@@ -817,23 +817,121 @@ function YesNoOracle() {
 }
 
 // ─── Master Feature Hub ───────────────────────────────────────────────────────
+// Feature metadata with vivid, distinct color identities
 const FEATURES: Array<{
   id: FeatureId;
   label: string;
   icon: React.ReactNode;
   tagline: string;
-  color: string;
-  bg: string;
+  // gradient for the card background
+  gradient: string;
+  // glow / shadow color
+  glow: string;
+  // border color
   border: string;
+  // text color for label
+  labelColor: string;
+  // accent badge color
+  badge: string;
+  // number for display
+  num: string;
 }> = [
-  { id: 'daily', label: 'Daily Card', icon: <Sun className="w-5 h-5" />, tagline: 'One card every day', color: 'text-[#F2D675]', bg: 'bg-[rgba(212,175,55,0.12)]', border: 'border-[rgba(212,175,55,0.3)]' },
-  { id: 'celtic', label: 'Celtic Cross', icon: <Star className="w-5 h-5" />, tagline: '10-card deep spread', color: 'text-[#C4B5FD]', bg: 'bg-[rgba(139,107,190,0.12)]', border: 'border-[rgba(139,107,190,0.3)]' },
-  { id: 'journal', label: 'Journal', icon: <BookOpen className="w-5 h-5" />, tagline: 'Track reflections', color: 'text-[#34D399]', bg: 'bg-[rgba(0,155,119,0.12)]', border: 'border-[rgba(0,155,119,0.3)]' },
-  { id: 'moment', label: 'Card of Moment', icon: <Sparkles className="w-5 h-5" />, tagline: 'AI planetary pick', color: 'text-[#F2D675]', bg: 'bg-[rgba(212,175,55,0.10)]', border: 'border-[rgba(212,175,55,0.25)]' },
-  { id: 'year', label: 'Year Ahead', icon: <Calendar className="w-5 h-5" />, tagline: '12 months spread', color: 'text-[#FCD34D]', bg: 'bg-[rgba(107,67,0,0.15)]', border: 'border-[rgba(212,175,55,0.25)]' },
-  { id: 'relationship', label: 'Relationship', icon: <Heart className="w-5 h-5" />, tagline: 'Dual soul spread', color: 'text-[#F472B6]', bg: 'bg-[rgba(219,39,119,0.12)]', border: 'border-[rgba(219,39,119,0.3)]' },
-  { id: 'meditation', label: 'Meditation', icon: <Moon className="w-5 h-5" />, tagline: 'Immersive mode', color: 'text-[#C4B5FD]', bg: 'bg-[rgba(139,107,190,0.12)]', border: 'border-[rgba(139,107,190,0.3)]' },
-  { id: 'yesno', label: 'Yes / No', icon: <HelpCircle className="w-5 h-5" />, tagline: 'Instant oracle answer', color: 'text-[#34D399]', bg: 'bg-[rgba(0,155,119,0.12)]', border: 'border-[rgba(0,155,119,0.3)]' },
+  {
+    id: 'daily',
+    label: 'Daily Card',
+    icon: <Sun className="w-8 h-8" />,
+    tagline: 'One card every day',
+    gradient: 'linear-gradient(135deg, #1A1000 0%, #3D2800 50%, #1A1000 100%)',
+    glow: 'rgba(212,175,55,0.55)',
+    border: 'rgba(212,175,55,0.7)',
+    labelColor: '#F2D675',
+    badge: 'bg-[rgba(212,175,55,0.25)] text-[#F2D675] border-[rgba(212,175,55,0.6)]',
+    num: '01',
+  },
+  {
+    id: 'celtic',
+    label: 'Celtic Cross',
+    icon: <Star className="w-8 h-8" />,
+    tagline: '10-card deep spread',
+    gradient: 'linear-gradient(135deg, #0D0020 0%, #2D1060 50%, #0D0020 100%)',
+    glow: 'rgba(139,107,190,0.55)',
+    border: 'rgba(139,107,190,0.7)',
+    labelColor: '#C4B5FD',
+    badge: 'bg-[rgba(139,107,190,0.25)] text-[#C4B5FD] border-[rgba(139,107,190,0.6)]',
+    num: '02',
+  },
+  {
+    id: 'journal',
+    label: 'Journal',
+    icon: <BookOpen className="w-8 h-8" />,
+    tagline: 'Track reflections',
+    gradient: 'linear-gradient(135deg, #001A14 0%, #003D2A 50%, #001A14 100%)',
+    glow: 'rgba(52,211,153,0.45)',
+    border: 'rgba(52,211,153,0.6)',
+    labelColor: '#34D399',
+    badge: 'bg-[rgba(52,211,153,0.2)] text-[#34D399] border-[rgba(52,211,153,0.55)]',
+    num: '03',
+  },
+  {
+    id: 'moment',
+    label: 'Card of Moment',
+    icon: <Sparkles className="w-8 h-8" />,
+    tagline: 'AI planetary pick',
+    gradient: 'linear-gradient(135deg, #1A0A00 0%, #3D1A00 50%, #1A0A00 100%)',
+    glow: 'rgba(251,146,60,0.5)',
+    border: 'rgba(251,146,60,0.65)',
+    labelColor: '#FB923C',
+    badge: 'bg-[rgba(251,146,60,0.2)] text-[#FB923C] border-[rgba(251,146,60,0.55)]',
+    num: '04',
+  },
+  {
+    id: 'year',
+    label: 'Year Ahead',
+    icon: <Calendar className="w-8 h-8" />,
+    tagline: '12 months spread',
+    gradient: 'linear-gradient(135deg, #001520 0%, #003050 50%, #001520 100%)',
+    glow: 'rgba(56,189,248,0.45)',
+    border: 'rgba(56,189,248,0.6)',
+    labelColor: '#38BDF8',
+    badge: 'bg-[rgba(56,189,248,0.2)] text-[#38BDF8] border-[rgba(56,189,248,0.55)]',
+    num: '05',
+  },
+  {
+    id: 'relationship',
+    label: 'Relationship',
+    icon: <Heart className="w-8 h-8" />,
+    tagline: 'Dual soul spread',
+    gradient: 'linear-gradient(135deg, #1A0012 0%, #450030 50%, #1A0012 100%)',
+    glow: 'rgba(244,114,182,0.5)',
+    border: 'rgba(244,114,182,0.65)',
+    labelColor: '#F472B6',
+    badge: 'bg-[rgba(244,114,182,0.2)] text-[#F472B6] border-[rgba(244,114,182,0.55)]',
+    num: '06',
+  },
+  {
+    id: 'meditation',
+    label: 'Meditation',
+    icon: <Moon className="w-8 h-8" />,
+    tagline: 'Immersive mode',
+    gradient: 'linear-gradient(135deg, #000D20 0%, #001840 50%, #000D20 100%)',
+    glow: 'rgba(99,179,237,0.45)',
+    border: 'rgba(99,179,237,0.6)',
+    labelColor: '#93C5FD',
+    badge: 'bg-[rgba(99,179,237,0.2)] text-[#93C5FD] border-[rgba(99,179,237,0.55)]',
+    num: '07',
+  },
+  {
+    id: 'yesno',
+    label: 'Yes / No Oracle',
+    icon: <HelpCircle className="w-8 h-8" />,
+    tagline: 'Instant answer',
+    gradient: 'linear-gradient(135deg, #0A1A00 0%, #1A3800 50%, #0A1A00 100%)',
+    glow: 'rgba(163,230,53,0.45)',
+    border: 'rgba(163,230,53,0.6)',
+    labelColor: '#A3E635',
+    badge: 'bg-[rgba(163,230,53,0.2)] text-[#A3E635] border-[rgba(163,230,53,0.55)]',
+    num: '08',
+  },
 ];
 
 export function TarotFeatureHub({ astrologyContext }: FeatureHubProps) {
@@ -841,40 +939,87 @@ export function TarotFeatureHub({ astrologyContext }: FeatureHubProps) {
 
   return (
     <div className="space-y-6">
-      {/* Feature Grid */}
+      {/* ── Feature Grid ─────────────────────────────────────── */}
       {!active && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-          <div className="text-center space-y-1">
-            <div className="font-serif text-2xl sm:text-3xl font-bold text-[#F5F4EC]">✦ Tarot Feature Sanctuary</div>
-            <p className="text-sm text-[#AABDB7]">8 sacred practices for your complete tarot journey</p>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
+          {/* Header */}
+          <div className="text-center space-y-3">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full"
+              style={{ background: 'linear-gradient(90deg,rgba(212,175,55,0.18),rgba(139,107,190,0.18))', border: '1px solid rgba(212,175,55,0.4)' }}>
+              <Sparkles className="w-3.5 h-3.5 text-[#F2D675]" />
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#D4AF37]">8 Sacred Practices</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#C4B5FD]" />
+            </div>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#F5F4EC] tracking-tight">
+              ✦ Tarot Feature Sanctuary
+            </h2>
+            <p className="text-sm text-[#AABDB7] max-w-md mx-auto leading-relaxed">
+              Choose your sacred practice — from daily draws and deep spreads<br className="hidden sm:block" /> to meditation, relationship readings and instant oracles.
+            </p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {FEATURES.map(f => (
+
+          {/* Cards Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {FEATURES.map((f, i) => (
               <motion.button
                 key={f.id}
                 onClick={() => setActive(f.id)}
-                whileHover={{ scale: 1.03, y: -2 }}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: i * 0.06, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                whileHover={{ scale: 1.05, y: -4 }}
                 whileTap={{ scale: 0.97 }}
-                className={`${f.bg} ${f.border} border liquid-glass-panel rounded-2xl p-4 flex flex-col items-center gap-2.5 text-center cursor-pointer transition-all hover:shadow-lg`}
+                style={{
+                  background: f.gradient,
+                  boxShadow: `0 0 0 1px ${f.border}, 0 8px 32px ${f.glow}`,
+                }}
+                className="relative rounded-2xl p-5 flex flex-col items-center gap-3 text-center cursor-pointer overflow-hidden transition-all group"
               >
-                <div className={f.color}>{f.icon}</div>
-                <div className={`font-serif font-bold text-sm ${f.color}`}>{f.label}</div>
-                <div className="text-[10px] text-[#AABDB7] font-mono">{f.tagline}</div>
+                {/* Subtle top shine */}
+                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ background: `radial-gradient(ellipse at 50% 0%, ${f.glow.replace('0.55', '0.25')} 0%, transparent 70%)` }} />
+
+                {/* Number badge top-left */}
+                <span
+                  className={`absolute top-2.5 left-3 text-[9px] font-mono px-1.5 py-0.5 rounded-full border ${f.badge}`}>
+                  {f.num}
+                </span>
+
+                {/* Icon with glow */}
+                <div style={{ color: f.labelColor, filter: `drop-shadow(0 0 8px ${f.glow})` }}
+                  className="mt-2 transition-transform duration-300 group-hover:scale-110">
+                  {f.icon}
+                </div>
+
+                {/* Label */}
+                <div className="font-serif font-bold text-sm leading-tight" style={{ color: f.labelColor }}>
+                  {f.label}
+                </div>
+
+                {/* Tagline */}
+                <div className="text-[10px] text-[#AABDB7]/80 font-mono leading-tight">{f.tagline}</div>
+
+                {/* Bottom arrow */}
+                <div className="mt-auto opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  style={{ color: f.labelColor }}>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </div>
               </motion.button>
             ))}
           </div>
         </motion.div>
       )}
 
-      {/* Active Feature View */}
+      {/* ── Active Feature View ───────────────────────────────── */}
       <AnimatePresence mode="wait">
         {active && (
           <motion.div key={active} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.3 }} className="space-y-6">
             {/* Back nav */}
             <button onClick={() => setActive(null)}
-              className="flex items-center gap-1.5 text-xs font-mono text-[#AABDB7] hover:text-[#F5F4EC] cursor-pointer transition-colors">
-              ← Back to Feature Sanctuary
+              className="flex items-center gap-1.5 text-xs font-mono text-[#AABDB7] hover:text-[#F5F4EC] cursor-pointer transition-colors group">
+              <ChevronRight className="w-3.5 h-3.5 rotate-180 group-hover:-translate-x-0.5 transition-transform" />
+              Back to Feature Sanctuary
             </button>
 
             {active === 'daily' && <DailyCardDraw />}
