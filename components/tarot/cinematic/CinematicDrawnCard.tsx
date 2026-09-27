@@ -7,7 +7,7 @@ import { TarotCard, TarotOrientation } from '@/lib/tarot/types';
 import { getTarotCardImageUrl } from '@/lib/tarot/cards';
 import { TarotCardBack } from './TarotCardBack';
 import { tarotAudio } from '@/lib/tarot/sound-effects';
-import { Sparkles, Eye, Compass, Flame, Droplets, Wind, Mountain } from 'lucide-react';
+import { Eye, Compass, Flame, Droplets, Wind, Mountain, Sparkles } from 'lucide-react';
 
 interface CinematicDrawnCardProps {
   card: TarotCard;
@@ -18,6 +18,7 @@ interface CinematicDrawnCardProps {
   onFlipTrigger?: () => void;
   onCardClick?: () => void;
   autoFlipDelayMs?: number;
+  onRevealComplete?: () => void;
 }
 
 export function CinematicDrawnCard({
@@ -28,40 +29,65 @@ export function CinematicDrawnCard({
   isFlipped,
   onFlipTrigger,
   onCardClick,
-  autoFlipDelayMs,
+  autoFlipDelayMs = 250,
+  onRevealComplete,
 }: CinematicDrawnCardProps) {
-  const [internalFlipped, setInternalFlipped] = useState(isFlipped);
+  // Draw stages: 'entering' -> 'flipping' -> 'revealed' -> 'settled'
+  const [internalFlipped, setInternalFlipped] = useState(false);
+  const [isFlipping, setIsFlipping] = useState(false);
   const [showBurst, setShowBurst] = useState(false);
-  const [showMeaning, setShowMeaning] = useState(isFlipped);
+  const [showGleam, setShowGleam] = useState(false);
+  const [showMeaning, setShowMeaning] = useState(false);
+  const [isSettled, setIsSettled] = useState(false);
 
-  // 3D Parallax tilt
+  // 3D Parallax tilt & cursor glow coordinates
   const [tilt, setTilt] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [glintPos, setGlintPos] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Trigger flip sequence
+  // Orchestrated sequential animation trigger
   useEffect(() => {
     if (isFlipped && !internalFlipped) {
-      const delay = autoFlipDelayMs ?? 200;
-      const tStart = setTimeout(() => {
+      // 1. Play draw flight sound
+      tarotAudio.playDraw();
+
+      // 2. Start 3D Flip after flight arrival
+      const tFlip = setTimeout(() => {
+        setIsFlipping(true);
         tarotAudio.playFlip();
         setInternalFlipped(true);
 
-        // 350ms: light burst & sound
-        setTimeout(() => {
+        // 3. At 350ms: Card reaches beyond 90° -> Celestial light burst & sacred Solfeggio chime
+        const tBurst = setTimeout(() => {
           setShowBurst(true);
+          setShowGleam(true);
           tarotAudio.playReveal();
         }, 350);
 
-        // 750ms: show meaning panel
-        setTimeout(() => {
-          setShowMeaning(true);
-        }, 750);
-      }, delay);
+        // 4. At 650ms: Card settles back down into table slot
+        const tSettle = setTimeout(() => {
+          setIsFlipping(false);
+          setIsSettled(true);
+        }, 650);
 
-      return () => clearTimeout(tStart);
+        // 5. At 800ms: Slide up the interpretation & keywords panel
+        const tMeaning = setTimeout(() => {
+          setShowMeaning(true);
+          if (onRevealComplete) {
+            onRevealComplete();
+          }
+        }, 820);
+
+        return () => {
+          clearTimeout(tBurst);
+          clearTimeout(tSettle);
+          clearTimeout(tMeaning);
+        };
+      }, autoFlipDelayMs);
+
+      return () => clearTimeout(tFlip);
     }
-  }, [isFlipped, internalFlipped, autoFlipDelayMs]);
+  }, [isFlipped, internalFlipped, autoFlipDelayMs, onRevealComplete]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -69,9 +95,9 @@ export function CinematicDrawnCard({
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-    // Constrain to ±3° max
-    const tiltY = ((x - 50) / 50) * 3;
-    const tiltX = -((y - 50) / 50) * 3;
+    // Constrain tilt to ±3.2° max for restrained luxury feel
+    const tiltY = ((x - 50) / 50) * 3.2;
+    const tiltX = -((y - 50) / 50) * 3.2;
 
     setTilt({ x: tiltX, y: tiltY });
     setGlintPos({ x, y });
@@ -96,10 +122,20 @@ export function CinematicDrawnCard({
   };
 
   return (
-    <div className="flex flex-col items-center select-none w-full max-w-[240px]">
+    <motion.div
+      initial={{ opacity: 0, y: 60, scale: 0.85, rotateZ: -4 }}
+      animate={{ opacity: 1, y: 0, scale: 1, rotateZ: 0 }}
+      transition={{
+        type: 'spring',
+        stiffness: 240,
+        damping: 22,
+        mass: 0.9,
+      }}
+      className="flex flex-col items-center select-none w-full max-w-[240px]"
+    >
       {/* Slot Label (e.g. CARD 1: PAST) */}
       <div className="text-center mb-3">
-        <span className="text-[11px] font-mono tracking-widest text-[#D4AF37] uppercase font-bold block">
+        <span className="text-[11px] font-mono tracking-widest text-[#D4AF37] uppercase font-bold block drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
           {slotTitle}
         </span>
         <span className="text-[10px] font-sans text-[#8BB5A8] tracking-wide block">
@@ -107,7 +143,7 @@ export function CinematicDrawnCard({
         </span>
       </div>
 
-      {/* 3D Card Container */}
+      {/* 3D Card Stage with Dynamic Shadow */}
       <div
         ref={cardRef}
         onMouseMove={handleMouseMove}
@@ -116,41 +152,93 @@ export function CinematicDrawnCard({
         className="relative w-[180px] sm:w-[200px] aspect-[7/12] cursor-pointer group"
         style={{ perspective: 1400 }}
       >
-        {/* Celestial Light Burst Effect upon 90° flip */}
+        {/* Dynamic Ground Shadow underneath the card */}
+        <motion.div
+          className="absolute -bottom-4 left-4 right-4 h-6 rounded-full pointer-events-none"
+          animate={{
+            scale: isFlipping ? 1.25 : 1,
+            opacity: isFlipping ? 0.35 : 0.65,
+            filter: isFlipping ? 'blur(20px)' : 'blur(10px)',
+          }}
+          transition={{ duration: 0.4 }}
+          style={{
+            background: 'radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.85) 0%, transparent 75%)',
+          }}
+        />
+
+        {/* Golden Summoning Halo / Arrival Pulse */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: [0, 0.7, 0], scale: [0.8, 1.2, 1.4] }}
+          transition={{ duration: 1.1, ease: 'easeOut' }}
+          className="absolute inset-[-10%] rounded-3xl pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle, rgba(212,175,55,0.35) 0%, rgba(0,155,119,0.2) 45%, transparent 70%)',
+            filter: 'blur(16px)',
+          }}
+        />
+
+        {/* 350ms Celestial Light Burst upon card reaching 90° */}
         <AnimatePresence>
           {showBurst && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: [0, 1, 0], scale: [0.6, 1.4, 1.8] }}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: [0, 1, 0], scale: [0.5, 1.4, 2.0] }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.7, ease: 'easeOut' }}
-              className="absolute inset-[-20%] rounded-full pointer-events-none z-50"
-              style={{
-                background: 'radial-gradient(circle, rgba(242,214,117,0.7) 0%, rgba(0,155,119,0.4) 40%, transparent 70%)',
-                filter: 'blur(14px)',
-              }}
-            />
+              transition={{ duration: 0.75, ease: 'easeOut' }}
+              className="absolute inset-[-30%] rounded-full pointer-events-none z-50 flex items-center justify-center"
+            >
+              {/* Concentric radial aura */}
+              <div
+                className="w-full h-full rounded-full"
+                style={{
+                  background: 'radial-gradient(circle, rgba(242,214,117,0.75) 0%, rgba(0,155,119,0.45) 40%, transparent 70%)',
+                  filter: 'blur(12px)',
+                }}
+              />
+
+              {/* 8 Starburst Light Rays */}
+              {Array.from({ length: 8 }).map((_, rIdx) => (
+                <motion.div
+                  key={rIdx}
+                  className="absolute w-28 h-0.5 pointer-events-none"
+                  initial={{ opacity: 0, scaleX: 0 }}
+                  animate={{ opacity: [0, 0.9, 0], scaleX: [0, 1.5, 2.2] }}
+                  transition={{ duration: 0.65, ease: 'easeOut' }}
+                  style={{
+                    transform: `rotate(${rIdx * 45}deg)`,
+                    background: 'linear-gradient(90deg, transparent 0%, #F2D675 50%, transparent 100%)',
+                  }}
+                />
+              ))}
+            </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Card Flipping Rigid Body */}
+        {/* The 3D Rigid Card Body */}
         <motion.div
           className="relative w-full h-full rounded-2xl"
           animate={{
             rotateY: internalFlipped ? 180 : 0,
+            y: isFlipping ? -18 : 0, // Apex lift during 3D flip
+            scale: isFlipping ? 1.05 : 1.0,
             rotateX: tilt.x,
-            rotateZ: tilt.y * 0.4,
+            rotateZ: tilt.y * 0.35,
           }}
           transition={{
-            rotateY: { duration: 0.75, ease: [0.34, 1.15, 0.64, 1] },
-            rotateX: { type: 'spring', stiffness: 240, damping: 24 },
-            rotateZ: { type: 'spring', stiffness: 240, damping: 24 },
+            rotateY: { duration: 0.75, ease: [0.34, 1.25, 0.64, 1] },
+            y: { duration: 0.75, ease: 'easeInOut' },
+            scale: { duration: 0.75, ease: 'easeInOut' },
+            rotateX: { type: 'spring', stiffness: 260, damping: 24 },
+            rotateZ: { type: 'spring', stiffness: 260, damping: 24 },
           }}
           style={{
             transformStyle: 'preserve-3d',
           }}
         >
-          {/* ================= CARD BACK ================= */}
+          {/* ======================================================== */}
+          {/* CARD BACK (Visible before & during first half of flip)    */}
+          {/* ======================================================== */}
           <div
             className="absolute inset-0 w-full h-full rounded-2xl"
             style={{
@@ -159,14 +247,20 @@ export function CinematicDrawnCard({
             }}
           >
             <TarotCardBack isHovered={true} />
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="px-2.5 py-1 rounded-full bg-[rgba(6,20,17,0.85)] border border-[rgba(212,175,55,0.4)] text-[10px] font-mono text-[#F2D675] shadow-lg">
-                Click to Reveal
-              </span>
-            </div>
+
+            {/* Prompt pill if waiting for manual flip */}
+            {!internalFlipped && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <span className="px-3 py-1 rounded-full bg-[rgba(6,20,17,0.85)] border border-[rgba(212,175,55,0.4)] text-[10px] font-mono text-[#F2D675] shadow-lg animate-pulse">
+                  Revealing…
+                </span>
+              </div>
+            )}
           </div>
 
-          {/* ================= CARD FRONT ================= */}
+          {/* ======================================================== */}
+          {/* CARD FRONT (Visible after 90° flip)                      */}
+          {/* ======================================================== */}
           <div
             className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden border border-[rgba(212,175,55,0.4)]"
             style={{
@@ -174,17 +268,17 @@ export function CinematicDrawnCard({
               WebkitBackfaceVisibility: 'hidden',
               transform: 'rotateY(180deg)',
               background: 'linear-gradient(145deg, #0B211B 0%, #102A23 50%, #061411 100%)',
-              boxShadow: '0 16px 36px rgba(0,0,0,0.65), 0 0 20px rgba(0,155,119,0.25)',
+              boxShadow: '0 16px 36px rgba(0,0,0,0.65), 0 0 24px rgba(0,155,119,0.25)',
             }}
           >
-            {/* Card Artwork Image */}
+            {/* Authentic Rider-Waite Card Artwork */}
             <div className="relative w-full h-full">
               <Image
                 src={imageUrl}
                 alt={card.name}
                 fill
                 sizes="(max-width: 768px) 180px, 200px"
-                className={`object-cover transition-transform duration-500 ${
+                className={`object-cover transition-transform duration-700 ease-out ${
                   isReversed ? 'rotate-180 scale-95' : 'scale-100'
                 }`}
                 priority
@@ -199,32 +293,49 @@ export function CinematicDrawnCard({
                 }}
               />
 
+              {/* Diagonally Sweeping Gloss Sheen at reveal */}
+              {showGleam && (
+                <motion.div
+                  initial={{ x: '-120%' }}
+                  animate={{ x: '220%' }}
+                  transition={{ duration: 0.85, ease: 'easeOut', delay: 0.1 }}
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background:
+                      'linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.45) 50%, transparent 80%)',
+                  }}
+                />
+              )}
+
               {/* Cursor-tracking Specular Glint */}
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: `radial-gradient(circle 120px at ${glintPos.x}% ${glintPos.y}%, rgba(255,255,255,0.12) 0%, transparent 60%)`,
+                  background: `radial-gradient(circle 120px at ${glintPos.x}% ${glintPos.y}%, rgba(255,255,255,0.14) 0%, transparent 60%)`,
                 }}
               />
 
-              {/* Top Orientation Badge */}
+              {/* Top Orientation Badge & Elemental Icon */}
               <div className="absolute top-2 left-2 right-2 flex items-center justify-between z-10">
-                <span
-                  className={`px-2 py-0.5 rounded-md text-[9px] font-mono uppercase tracking-wider font-semibold shadow-md ${
+                <motion.span
+                  initial={{ scale: 0.7, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.45, duration: 0.3 }}
+                  className={`px-2.5 py-0.5 rounded-md text-[9px] font-mono uppercase tracking-wider font-semibold shadow-md ${
                     isReversed
-                      ? 'bg-amber-950/80 border border-amber-500/50 text-amber-300'
-                      : 'bg-emerald-950/80 border border-emerald-500/50 text-emerald-300'
+                      ? 'bg-amber-950/85 border border-amber-500/60 text-amber-300'
+                      : 'bg-emerald-950/85 border border-emerald-500/60 text-emerald-300'
                   }`}
                 >
                   {isReversed ? '↺ REVERSED' : '✦ UPRIGHT'}
-                </span>
+                </motion.span>
 
-                <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-[rgba(6,20,17,0.8)] border border-[rgba(255,255,255,0.1)]">
+                <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-[rgba(6,20,17,0.85)] border border-[rgba(255,255,255,0.12)] shadow-md">
                   {renderElementIcon()}
                 </div>
               </div>
 
-              {/* Bottom Card Title & Arcana */}
+              {/* Bottom Card Title & Arcana / Rank */}
               <div className="absolute bottom-2.5 left-2.5 right-2.5 z-10 text-center">
                 <h4 className="font-serif text-sm font-bold text-[#F5F4EC] leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
                   {card.name}
@@ -238,14 +349,16 @@ export function CinematicDrawnCard({
         </motion.div>
       </div>
 
-      {/* Card Meaning Panel below card */}
+      {/* ======================================================== */}
+      {/* CARD MEANING PANEL (Smooth slide-in after 800ms)         */}
+      {/* ======================================================== */}
       <AnimatePresence>
         {showMeaning && (
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: 'easeOut' }}
-            className="w-full mt-3 p-3 rounded-xl bg-[rgba(16,42,35,0.7)] border border-[rgba(0,155,119,0.3)] backdrop-blur-md shadow-lg text-center"
+            className="w-full mt-3 p-3 rounded-xl bg-[rgba(16,42,35,0.75)] border border-[rgba(0,155,119,0.35)] backdrop-blur-md shadow-lg text-center"
           >
             {/* Keywords */}
             <p className="text-[11px] font-mono text-[#D4AF37] leading-relaxed mb-1 font-semibold">
@@ -270,6 +383,6 @@ export function CinematicDrawnCard({
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }

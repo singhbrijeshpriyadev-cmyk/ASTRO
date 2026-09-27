@@ -138,6 +138,34 @@ class TarotAudioController {
   }
 
   /**
+   * Card Draw / Flight sound: Smooth upward glide with papery slide and harmonic rise.
+   */
+  public playDraw() {
+    if (this.isMuted) return;
+    const ctx = this.initContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    this.playPaperSlide(ctx, now, 0.22, 1100);
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, now);
+    osc.frequency.exponentialRampToValueAtTime(784, now + 0.22); // A4 to G5
+
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.025, now + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.26);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.28);
+  }
+
+  /**
    * Card Flip sound: Smooth aerodynamic whoosh as card rotates in 3D.
    */
   public playFlip() {
@@ -146,7 +174,23 @@ class TarotAudioController {
     if (!ctx) return;
 
     const now = ctx.currentTime;
-    this.playPaperSlide(ctx, now, 0.28, 950);
+    this.playPaperSlide(ctx, now, 0.32, 950);
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.exponentialRampToValueAtTime(520, now + 0.28);
+
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.02, now + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.33);
   }
 
   /**

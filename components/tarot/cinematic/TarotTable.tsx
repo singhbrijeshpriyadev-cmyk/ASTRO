@@ -54,6 +54,7 @@ export function TarotTable() {
   const [virtualDeck, setVirtualDeck] = useState<TarotCard[]>([]);
   const [selectedDeckIndices, setSelectedDeckIndices] = useState<number[]>([]);
   const [drawnCards, setDrawnCards] = useState<DrawnCardItem[]>([]);
+  const [isDrawingInProgress, setIsDrawingInProgress] = useState(false);
 
   // Detailed Modal Card State
   const [modalCard, setModalCard] = useState<{ card: TarotCard; orientation: TarotOrientation } | null>(null);
@@ -105,11 +106,14 @@ export function TarotTable() {
   // Step 10 & 11: User selects a card from fanned ribbon
   const handleSelectFannedCard = (index: number) => {
     if (tableState !== 'SELECTING_CARD') return;
+    if (isDrawingInProgress) return;
     if (selectedDeckIndices.includes(index)) return;
 
     const currentSlotIndex = drawnCards.length;
     const targetSlot = selectedSpread.slots[currentSlotIndex];
     if (!targetSlot) return;
+
+    setIsDrawingInProgress(true);
 
     // Cryptographic orientation determination
     const provider = getCryptoProvider();
@@ -134,11 +138,9 @@ export function TarotTable() {
 
     // If all cards for the spread have been drawn:
     if (nextDrawn.length >= selectedSpread.cardCount) {
-      setTableState('REVEALING');
-      // After cards settle and reveal animations finish, display reading complete summary
       setTimeout(() => {
-        setTableState('READING_COMPLETE');
-      }, 1600);
+        setTableState('REVEALING');
+      }, 1000);
     }
   };
 
@@ -337,29 +339,80 @@ export function TarotTable() {
                         slotTitle={drawnItem.slotTitle}
                         slotSubtitle={drawnItem.slotSubtitle}
                         isFlipped={true}
-                        autoFlipDelayMs={sIdx * 250}
+                        autoFlipDelayMs={250}
+                        onRevealComplete={() => setIsDrawingInProgress(false)}
                         onCardClick={() => setModalCard({ card: drawnItem.card, orientation: drawnItem.orientation })}
                       />
                     ) : (
-                      /* Empty Target Reading Slot */
-                      <div className="flex flex-col items-center w-[180px] sm:w-[200px]">
-                        <div className="text-center mb-3">
-                          <span className="text-[11px] font-mono tracking-widest text-[#AABDB7] uppercase font-bold block">
-                            {slot.title}
-                          </span>
-                          <span className="text-[10px] font-sans text-[#6A9A8C] block">
-                            {slot.subtitle}
-                          </span>
-                        </div>
-                        <div className="relative w-[180px] sm:w-[200px] aspect-[7/12] rounded-2xl border-2 border-dashed border-[rgba(212,175,55,0.25)] bg-[rgba(6,20,17,0.4)] flex flex-col items-center justify-center text-center p-4">
-                          <div className="w-10 h-10 rounded-full border border-dashed border-[rgba(0,155,119,0.35)] flex items-center justify-center text-[#D4AF37]/50 mb-2">
-                            {sIdx + 1}
+                      /* Empty Target Reading Slot with active portal beacon */
+                      (() => {
+                        const isActiveSlot = sIdx === drawnCards.length;
+                        return (
+                          <div className="flex flex-col items-center w-[180px] sm:w-[200px]">
+                            <div className="text-center mb-3">
+                              <span className={`text-[11px] font-mono tracking-widest uppercase font-bold block ${
+                                isActiveSlot ? 'text-[#F2D675] drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]' : 'text-[#AABDB7]'
+                              }`}>
+                                {slot.title}
+                              </span>
+                              <span className="text-[10px] font-sans text-[#8BB5A8] block">
+                                {slot.subtitle}
+                              </span>
+                            </div>
+                            <motion.div
+                              animate={
+                                isActiveSlot
+                                  ? {
+                                      scale: [1, 1.025, 1],
+                                      borderColor: ['rgba(212,175,55,0.4)', 'rgba(0,155,119,0.8)', 'rgba(212,175,55,0.4)'],
+                                      boxShadow: [
+                                        '0 0 15px rgba(212,175,55,0.15)',
+                                        '0 0 30px rgba(0,155,119,0.35)',
+                                        '0 0 15px rgba(212,175,55,0.15)',
+                                      ],
+                                    }
+                                  : {}
+                              }
+                              transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                              className={`relative w-[180px] sm:w-[200px] aspect-[7/12] rounded-2xl border-2 border-dashed flex flex-col items-center justify-center text-center p-4 backdrop-blur-sm transition-colors ${
+                                isActiveSlot
+                                  ? 'bg-[rgba(16,42,35,0.5)] border-[rgba(212,175,55,0.6)]'
+                                  : 'border-[rgba(212,175,55,0.2)] bg-[rgba(6,20,17,0.35)]'
+                              }`}
+                            >
+                              <div
+                                className={`w-11 h-11 rounded-full border border-dashed flex items-center justify-center mb-2 transition-all ${
+                                  isActiveSlot
+                                    ? 'border-[#D4AF37] bg-[rgba(212,175,55,0.12)] text-[#F2D675] shadow-[0_0_12px_rgba(212,175,55,0.5)]'
+                                    : 'border-[rgba(0,155,119,0.35)] text-[#D4AF37]/50'
+                                }`}
+                              >
+                                {isActiveSlot ? (
+                                  <Sparkles className="w-5 h-5 animate-spin" style={{ animationDuration: '6s' }} />
+                                ) : (
+                                  <span className="font-mono text-sm">{sIdx + 1}</span>
+                                )}
+                              </div>
+                              <span className={`text-[11px] font-mono tracking-wider font-semibold ${
+                                isActiveSlot ? 'text-[#F2D675]' : 'text-[#AABDB7]/70'
+                              }`}>
+                                {isActiveSlot
+                                  ? isDrawingInProgress
+                                    ? 'Convergencing…'
+                                    : 'Active Receptor'
+                                  : 'Reserved Slot'}
+                              </span>
+                              <span className="text-[10px] font-sans text-[#8BB5A8]/80 mt-1 max-w-[140px] leading-tight">
+                                {isActiveSlot
+                                  ? isDrawingInProgress
+                                    ? 'Card is flying into position'
+                                    : 'Pick a card from ribbon'
+                                  : `Position ${sIdx + 1}`}
+                              </span>
+                            </motion.div>
                           </div>
-                          <span className="text-[11px] font-mono text-[#AABDB7]/80">
-                            {sIdx === drawnCards.length ? 'Awaiting draw…' : 'Reserved Slot'}
-                          </span>
-                        </div>
-                      </div>
+                        );
+                      })()
                     )}
                   </div>
                 );
@@ -373,7 +426,12 @@ export function TarotTable() {
                   totalCards={78}
                   selectedIndices={selectedDeckIndices}
                   onSelectCard={handleSelectFannedCard}
-                  promptText={`Choose Card ${currentPickNumber} of ${selectedSpread.cardCount}: ${currentSlotTitle}`}
+                  disabled={isDrawingInProgress}
+                  promptText={
+                    isDrawingInProgress
+                      ? '✦ Consecrating card in flight…'
+                      : `Choose Card ${currentPickNumber} of ${selectedSpread.cardCount}: ${currentSlotTitle}`
+                  }
                 />
               </div>
             )}

@@ -27,11 +27,19 @@ export function CardFannedSpread({
   // Localized cursor coordinate tracking inside hovered card
   const [mouseCoord, setMouseCoord] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
 
+  const [lastClickedIdx, setLastClickedIdx] = useState<number | null>(null);
+
   const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>, idx: number) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     setMouseCoord({ x, y });
+  };
+
+  const handleCardClick = (idx: number) => {
+    if (disabled || selectedIndices.includes(idx)) return;
+    setLastClickedIdx(idx);
+    onSelectCard(idx);
   };
 
   const handleCardHover = (idx: number | null) => {
@@ -123,14 +131,10 @@ export function CardFannedSpread({
                 onMouseEnter={() => handleCardHover(idx)}
                 onMouseLeave={() => handleCardHover(null)}
                 onMouseMove={(e) => handleCardMouseMove(e, idx)}
-                onClick={() => {
-                  if (!disabled && !isSelected) {
-                    onSelectCard(idx);
-                  }
-                }}
+                onClick={() => handleCardClick(idx)}
                 onKeyDown={(e) => {
-                  if ((e.key === 'Enter' || e.key === ' ') && !disabled && !isSelected) {
-                    onSelectCard(idx);
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handleCardClick(idx);
                   }
                 }}
                 className={`relative flex-shrink-0 w-[110px] sm:w-[130px] aspect-[7/12] cursor-pointer transition-opacity duration-300 pointer-events-auto ${
@@ -141,15 +145,15 @@ export function CardFannedSpread({
                   zIndex: isHovered ? 120 : isSelected ? 1 : idx + 2,
                 }}
                 animate={{
-                  y: isHovered ? -26 : 0,
-                  scale: isHovered ? 1.08 : 1,
+                  y: lastClickedIdx === idx ? -55 : isHovered ? -26 : 0,
+                  scale: lastClickedIdx === idx ? 1.14 : isHovered ? 1.08 : 1,
                   rotateX: isHovered ? 4 : 0,
                   x: neighborOffset,
                 }}
                 transition={{
                   type: 'spring',
                   stiffness: 380,
-                  damping: 26,
+                  damping: 24,
                 }}
               >
                 <TarotCardBack isHovered={isHovered} />
