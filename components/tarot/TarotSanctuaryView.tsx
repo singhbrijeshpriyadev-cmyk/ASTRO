@@ -22,6 +22,7 @@ import { ReadingHistoryDrawer } from './reading/ReadingHistoryDrawer';
 import { TarotArchetypeShell } from './TarotArchetypeShell';
 import { LuxuryTarotCard } from './LuxuryTarotCard';
 import { TarotFeatureHub } from './TarotFeatureHub';
+import { TarotTable } from './cinematic/TarotTable';
 import { 
   Sparkles, 
   Layers, 
@@ -263,54 +264,8 @@ export function TarotSanctuaryView({
       {/* 1. THREE-CARD ORACLE READING FLOW TAB */}
       {/* ======================================================== */}
       {activeTab === 'reading' && (
-        <div className="space-y-6">
-          {flowStep === 'home' && (
-            <TarotHomeStep
-              onStartReading={handleStartFromHome}
-              onOpenHistory={() => setShowHistoryDrawer(true)}
-              onOpenCompendium={() => setActiveTab('compendium')}
-            />
-          )}
-
-          {flowStep === 'question' && (
-            <QuestionStep
-              initialTopic={selectedTopic}
-              initialQuestion={userQuestion}
-              birthProfileName={birthProfileName}
-              astrologyContext={astrologyContext}
-              onSubmit={handleQuestionSubmit}
-              onBack={() => setFlowStep('home')}
-            />
-          )}
-
-          {flowStep === 'shuffle' && (
-            <ShuffleAnimation onComplete={handleShuffleComplete} />
-          )}
-
-          {flowStep === 'draw' && (
-            <InteractiveDeckDrawStep
-              question={userQuestion}
-              topicLabel={selectedTopic}
-              onCardsDrawn={handleCardsDrawn}
-              onBack={() => setFlowStep('question')}
-            />
-          )}
-
-          {flowStep === 'reveal' && currentReading && (
-            <CardRevealStep
-              reading={currentReading}
-              onRevealComplete={handleRevealComplete}
-            />
-          )}
-
-          {flowStep === 'result' && currentReading && (
-            <ReadingResultStep
-              reading={currentReading}
-              onNewReading={handleResetToNew}
-              onShareReading={() => setShowShareModal(true)}
-              onSynthesizeAstrology={handleSynthesizeAstrology}
-            />
-          )}
+        <div className="w-full animate-fade-in">
+          <TarotTable />
         </div>
       )}
 
